@@ -1,0 +1,724 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		E11BF0010001 /* LatZipApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11FR0010001 /* LatZipApp.swift */; };
+		E11BF0030001 /* ArchiveNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11FR0030001 /* ArchiveNode.swift */; };
+		E11BF0040001 /* ArchiveTreeBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11FR0040001 /* ArchiveTreeBuilder.swift */; };
+		E11BF0080001 /* MainArchiveShellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11FR0080001 /* MainArchiveShellView.swift */; };
+		E11BF0090001 /* QuickLookPreviewRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11FR0090001 /* QuickLookPreviewRepresentable.swift */; };
+		E11BF0100001 /* ArchiveEngine.c in Sources */ = {isa = PBXBuildFile; fileRef = E11FR0100001 /* ArchiveEngine.c */; };
+		E11BF0130001 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E11FR0130001 /* Assets.xcassets */; };
+		E11BF0140001 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = E11FR0140001 /* en */; };
+		E11BF0150001 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = E11FR0150001 /* es */; };
+		E11BF0160001 /* ArchiveEntryRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11FR0160001 /* ArchiveEntryRecord.swift */; };
+		E11BF0170001 /* ArchiveIndex.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11FR0170001 /* ArchiveIndex.swift */; };
+		E11BF0180001 /* ArchiveFormatCapabilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11FR0180001 /* ArchiveFormatCapabilities.swift */; };
+		E11BF0650001 /* AppLanguage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11FR0650001 /* AppLanguage.swift */; };
+		E11BF0190001 /* ArchivePathSanitizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11FR0190001 /* ArchivePathSanitizer.swift */; };
+		E11BF0200001 /* ArchiveReaderService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11FR0200001 /* ArchiveReaderService.swift */; };
+		E11BF0210001 /* ArchiveWriterService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11FR0210001 /* ArchiveWriterService.swift */; };
+		E11BF0220001 /* ArchiveExtractionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11FR0220001 /* ArchiveExtractionService.swift */; };
+		E11BF0230001 /* TemporaryWorkspaceService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11FR0230001 /* TemporaryWorkspaceService.swift */; };
+		E11BF0240001 /* FormatSupportService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11FR0240001 /* FormatSupportService.swift */; };
+		E11BF0250001 /* ArchiveWorkspaceViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11FR0250001 /* ArchiveWorkspaceViewModel.swift */; };
+		E11BF0260001 /* ArchiveAppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11FR0260001 /* ArchiveAppState.swift */; };
+		E11BF0340001 /* FileTypeIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11FR0340001 /* FileTypeIcon.swift */; };
+		E11BF0350001 /* ArchiveSidebarPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11FR0350001 /* ArchiveSidebarPanel.swift */; };
+		E11BF0370001 /* ArchiveFileListTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11FR0370001 /* ArchiveFileListTable.swift */; };
+		E11BF0380001 /* ArchivePreviewInspectorPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11FR0380001 /* ArchivePreviewInspectorPanel.swift */; };
+		E11BF0500001 /* AppColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11FR0500001 /* AppColors.swift */; };
+		E11BF0510001 /* AppSpacing.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11FR0510001 /* AppSpacing.swift */; };
+		E11BF0520001 /* AppTypography.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11FR0520001 /* AppTypography.swift */; };
+		E11BF0530001 /* AppRadius.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11FR0530001 /* AppRadius.swift */; };
+		E11BF0540001 /* AppShadows.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11FR0540001 /* AppShadows.swift */; };
+		E11BF0550001 /* AppAnimations.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11FR0550001 /* AppAnimations.swift */; };
+		E11BF0560001 /* View+AppStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11FR0560001 /* View+AppStyles.swift */; };
+		E11BF0570001 /* SidebarSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11FR0570001 /* SidebarSectionView.swift */; };
+		E11BF0580001 /* SidebarItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11FR0580001 /* SidebarItemView.swift */; };
+		E11BF0590001 /* ColumnHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11FR0590001 /* ColumnHeaderView.swift */; };
+		E11BF05A0001 /* FileRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11FR05A0001 /* FileRowView.swift */; };
+		E11BF05B0001 /* MetadataRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11FR05B0001 /* MetadataRowView.swift */; };
+		E11BF05C0001 /* PanelCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11FR05C0001 /* PanelCardView.swift */; };
+		E11BF05D0001 /* PreviewPanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11FR05D0001 /* PreviewPanelView.swift */; };
+		E11BF05E0001 /* EmptyStateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11FR05E0001 /* EmptyStateView.swift */; };
+		E11BF05F0001 /* FileListSkeletonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11FR05F0001 /* FileListSkeletonView.swift */; };
+		E11BF0600001 /* SearchFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11FR0600001 /* SearchFieldView.swift */; };
+		E11BF0610001 /* AppToolbarButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11FR0610001 /* AppToolbarButton.swift */; };
+		E11BF0620001 /* BreadcrumbView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11FR0620001 /* BreadcrumbView.swift */; };
+		E11BF0630001 /* StatusBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11FR0630001 /* StatusBarView.swift */; };
+		E11BF0640001 /* PreferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11FR0640001 /* PreferencesView.swift */; };
+		E11BF0400001 /* ArchiveWorkspaceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11FR0400001 /* ArchiveWorkspaceView.swift */; };
+		E11BF0300001 /* ArchivePathSanitizerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11FR0300001 /* ArchivePathSanitizerTests.swift */; };
+		E11BF0660001 /* ArchiveExtractionServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11FR0660001 /* ArchiveExtractionServiceTests.swift */; };
+		E11BF0310001 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E11FR0310001 /* XCTest.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		E11FR0010001 /* LatZipApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LatZipApp.swift; sourceTree = "<group>"; };
+		E11FR0030001 /* ArchiveNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchiveNode.swift; sourceTree = "<group>"; };
+		E11FR0040001 /* ArchiveTreeBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchiveTreeBuilder.swift; sourceTree = "<group>"; };
+		E11FR0080001 /* MainArchiveShellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainArchiveShellView.swift; sourceTree = "<group>"; };
+		E11FR0090001 /* QuickLookPreviewRepresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickLookPreviewRepresentable.swift; sourceTree = "<group>"; };
+		E11FR0100001 /* ArchiveEngine.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = ArchiveEngine.c; sourceTree = "<group>"; };
+		E11FR0110001 /* ArchiveEngine.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ArchiveEngine.h; sourceTree = "<group>"; };
+		E11FR0120001 /* LatZip-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "LatZip-Bridging-Header.h"; sourceTree = "<group>"; };
+		E11FR0130001 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		E11FR0140001 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		E11FR0150001 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
+		E11FR0160001 /* ArchiveEntryRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchiveEntryRecord.swift; sourceTree = "<group>"; };
+		E11FR0170001 /* ArchiveIndex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchiveIndex.swift; sourceTree = "<group>"; };
+		E11FR0180001 /* ArchiveFormatCapabilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchiveFormatCapabilities.swift; sourceTree = "<group>"; };
+		E11FR0650001 /* AppLanguage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLanguage.swift; sourceTree = "<group>"; };
+		E11FR0190001 /* ArchivePathSanitizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchivePathSanitizer.swift; sourceTree = "<group>"; };
+		E11FR0200001 /* ArchiveReaderService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchiveReaderService.swift; sourceTree = "<group>"; };
+		E11FR0210001 /* ArchiveWriterService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchiveWriterService.swift; sourceTree = "<group>"; };
+		E11FR0220001 /* ArchiveExtractionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchiveExtractionService.swift; sourceTree = "<group>"; };
+		E11FR0230001 /* TemporaryWorkspaceService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemporaryWorkspaceService.swift; sourceTree = "<group>"; };
+		E11FR0240001 /* FormatSupportService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormatSupportService.swift; sourceTree = "<group>"; };
+		E11FR0250001 /* ArchiveWorkspaceViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchiveWorkspaceViewModel.swift; sourceTree = "<group>"; };
+		E11FR0260001 /* ArchiveAppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchiveAppState.swift; sourceTree = "<group>"; };
+		E11FR0340001 /* FileTypeIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileTypeIcon.swift; sourceTree = "<group>"; };
+		E11FR0350001 /* ArchiveSidebarPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchiveSidebarPanel.swift; sourceTree = "<group>"; };
+		E11FR0370001 /* ArchiveFileListTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchiveFileListTable.swift; sourceTree = "<group>"; };
+		E11FR0380001 /* ArchivePreviewInspectorPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchivePreviewInspectorPanel.swift; sourceTree = "<group>"; };
+		E11FR0500001 /* AppColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppColors.swift; sourceTree = "<group>"; };
+		E11FR0510001 /* AppSpacing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSpacing.swift; sourceTree = "<group>"; };
+		E11FR0520001 /* AppTypography.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTypography.swift; sourceTree = "<group>"; };
+		E11FR0530001 /* AppRadius.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppRadius.swift; sourceTree = "<group>"; };
+		E11FR0540001 /* AppShadows.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppShadows.swift; sourceTree = "<group>"; };
+		E11FR0550001 /* AppAnimations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppAnimations.swift; sourceTree = "<group>"; };
+		E11FR0560001 /* View+AppStyles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+AppStyles.swift"; sourceTree = "<group>"; };
+		E11FR0570001 /* SidebarSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidebarSectionView.swift; sourceTree = "<group>"; };
+		E11FR0580001 /* SidebarItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidebarItemView.swift; sourceTree = "<group>"; };
+		E11FR0590001 /* ColumnHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColumnHeaderView.swift; sourceTree = "<group>"; };
+		E11FR05A0001 /* FileRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileRowView.swift; sourceTree = "<group>"; };
+		E11FR05B0001 /* MetadataRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetadataRowView.swift; sourceTree = "<group>"; };
+		E11FR05C0001 /* PanelCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PanelCardView.swift; sourceTree = "<group>"; };
+		E11FR05D0001 /* PreviewPanelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewPanelView.swift; sourceTree = "<group>"; };
+		E11FR05E0001 /* EmptyStateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyStateView.swift; sourceTree = "<group>"; };
+		E11FR05F0001 /* FileListSkeletonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileListSkeletonView.swift; sourceTree = "<group>"; };
+		E11FR0600001 /* SearchFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchFieldView.swift; sourceTree = "<group>"; };
+		E11FR0610001 /* AppToolbarButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppToolbarButton.swift; sourceTree = "<group>"; };
+		E11FR0620001 /* BreadcrumbView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreadcrumbView.swift; sourceTree = "<group>"; };
+		E11FR0630001 /* StatusBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusBarView.swift; sourceTree = "<group>"; };
+		E11FR0400001 /* ArchiveWorkspaceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchiveWorkspaceView.swift; sourceTree = "<group>"; };
+		E11FR0640001 /* PreferencesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesView.swift; sourceTree = "<group>"; };
+		E11FR0300001 /* ArchivePathSanitizerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchivePathSanitizerTests.swift; sourceTree = "<group>"; };
+		E11FR0660001 /* ArchiveExtractionServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchiveExtractionServiceTests.swift; sourceTree = "<group>"; };
+		E11FR0310001 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = System/Library/Frameworks/XCTest.framework; sourceTree = SDKROOT; };
+		E11FR0320001 /* InfoAdditions.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = InfoAdditions.plist; sourceTree = "<group>"; };
+		E11PR9900001 /* LatZip.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LatZip.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		E11PR9910001 /* LatZipTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LatZipTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		E11FWBP0010001 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E11FWBPTST001 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E11BF0310001 /* XCTest.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXContainerItemProxy section */
+		E11CIP000001 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E11PRJ0010001 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E11TGT0010001;
+			remoteInfo = LatZip;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXTargetDependency section */
+		E11TDEP00001 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E11TGT0010001 /* LatZip */;
+			targetProxy = E11CIP000001 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXGroup section */
+		E11GRPROOT001 = {
+			isa = PBXGroup;
+			children = (
+				E11GRPAPP001 /* LatZip */,
+				E11GRPTST001 /* LatZipTests */,
+				E11GRPPRD001 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		E11GRPAPP001 /* LatZip */ = {
+			isa = PBXGroup;
+			children = (
+				E11FR0010001 /* LatZipApp.swift */,
+				E11GRPMDL001 /* Models */,
+				E11GRPSVC001 /* Services */,
+				E11GRPVM001 /* ViewModels */,
+				E11GRPDS001 /* DesignSystem */,
+				E11GRPVW001 /* Views */,
+				E11GRPUTL001 /* Utilities */,
+				E11GRPCBR001 /* CBridge */,
+				E11FR0120001 /* LatZip-Bridging-Header.h */,
+				E11FR0130001 /* Assets.xcassets */,
+				E11FR0140001 /* en */,
+				E11FR0150001 /* es */,
+				E11FR0320001 /* InfoAdditions.plist */,
+			);
+			path = LatZip;
+			sourceTree = "<group>";
+		};
+		E11GRPTST001 /* LatZipTests */ = {
+			isa = PBXGroup;
+			children = (
+				E11FR0660001 /* ArchiveExtractionServiceTests.swift */,
+				E11FR0300001 /* ArchivePathSanitizerTests.swift */,
+			);
+			path = LatZipTests;
+			sourceTree = "<group>";
+		};
+		E11GRPMDL001 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				E11FR0650001 /* AppLanguage.swift */,
+				E11FR0160001 /* ArchiveEntryRecord.swift */,
+				E11FR0170001 /* ArchiveIndex.swift */,
+				E11FR0180001 /* ArchiveFormatCapabilities.swift */,
+				E11FR0030001 /* ArchiveNode.swift */,
+				E11FR0040001 /* ArchiveTreeBuilder.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		E11GRPSVC001 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				E11FR0200001 /* ArchiveReaderService.swift */,
+				E11FR0210001 /* ArchiveWriterService.swift */,
+				E11FR0220001 /* ArchiveExtractionService.swift */,
+				E11FR0230001 /* TemporaryWorkspaceService.swift */,
+				E11FR0240001 /* FormatSupportService.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		E11GRPVM001 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				E11FR0260001 /* ArchiveAppState.swift */,
+				E11FR0250001 /* ArchiveWorkspaceViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		E11GRPDS001 /* DesignSystem */ = {
+			isa = PBXGroup;
+			children = (
+				E11FR0500001 /* AppColors.swift */,
+				E11FR0510001 /* AppSpacing.swift */,
+				E11FR0520001 /* AppTypography.swift */,
+				E11FR0530001 /* AppRadius.swift */,
+				E11FR0540001 /* AppShadows.swift */,
+				E11FR0550001 /* AppAnimations.swift */,
+				E11FR0560001 /* View+AppStyles.swift */,
+				E11GRPDS002 /* Components */,
+			);
+			path = DesignSystem;
+			sourceTree = "<group>";
+		};
+		E11GRPDS002 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				E11FR0570001 /* SidebarSectionView.swift */,
+				E11FR0580001 /* SidebarItemView.swift */,
+				E11FR0590001 /* ColumnHeaderView.swift */,
+				E11FR05A0001 /* FileRowView.swift */,
+				E11FR05B0001 /* MetadataRowView.swift */,
+				E11FR05C0001 /* PanelCardView.swift */,
+				E11FR05D0001 /* PreviewPanelView.swift */,
+				E11FR05E0001 /* EmptyStateView.swift */,
+				E11FR05F0001 /* FileListSkeletonView.swift */,
+				E11FR0600001 /* SearchFieldView.swift */,
+				E11FR0610001 /* AppToolbarButton.swift */,
+				E11FR0620001 /* BreadcrumbView.swift */,
+				E11FR0630001 /* StatusBarView.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		E11GRPCMP001 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				E11FR0340001 /* FileTypeIcon.swift */,
+				E11FR0350001 /* ArchiveSidebarPanel.swift */,
+				E11FR0370001 /* ArchiveFileListTable.swift */,
+				E11FR0380001 /* ArchivePreviewInspectorPanel.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		E11GRPVW001 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				E11FR0080001 /* MainArchiveShellView.swift */,
+				E11FR0400001 /* ArchiveWorkspaceView.swift */,
+				E11FR0640001 /* PreferencesView.swift */,
+				E11FR0090001 /* QuickLookPreviewRepresentable.swift */,
+				E11GRPCMP001 /* Components */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		E11GRPUTL001 /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				E11FR0190001 /* ArchivePathSanitizer.swift */,
+			);
+			path = Utilities;
+			sourceTree = "<group>";
+		};
+		E11GRPCBR001 /* CBridge */ = {
+			isa = PBXGroup;
+			children = (
+				E11FR0100001 /* ArchiveEngine.c */,
+				E11FR0110001 /* ArchiveEngine.h */,
+			);
+			path = CBridge;
+			sourceTree = "<group>";
+		};
+		E11GRPPRD001 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				E11PR9900001 /* LatZip.app */,
+				E11PR9910001 /* LatZipTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		E11TGT0010001 /* LatZip */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E11TGTCONFLS001 /* Build configuration list for PBXNativeTarget "LatZip" */;
+			buildPhases = (
+				E11SRCBP0010001 /* Sources */,
+				E11FWBP0010001 /* Frameworks */,
+				E11RSCBP0010001 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = LatZip;
+			productName = LatZip;
+			productReference = E11PR9900001 /* LatZip.app */;
+			productType = "com.apple.product-type.application";
+		};
+		E11TGT0100001 /* LatZipTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E11TGTCONFTST001 /* Build configuration list for PBXNativeTarget "LatZipTests" */;
+			buildPhases = (
+				E11SRCBPTST001 /* Sources */,
+				E11FWBPTST001 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				E11TDEP00001 /* PBXTargetDependency */,
+			);
+			name = LatZipTests;
+			productName = LatZipTests;
+			productReference = E11PR9910001 /* LatZipTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		E11PRJ0010001 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1520;
+				LastUpgradeCheck = 1520;
+				TargetAttributes = {
+					E11TGT0010001 = {
+						CreatedOnToolsVersion = 15.2;
+					};
+					E11TGT0100001 = {
+						CreatedOnToolsVersion = 15.2;
+						TestTargetID = E11TGT0010001;
+					};
+				};
+			};
+			buildConfigurationList = E11PRJCONFLS001 /* Build configuration list for PBXProject "LatZip" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				es,
+				Base,
+			);
+			mainGroup = E11GRPROOT001;
+			productRefGroup = E11GRPPRD001 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				E11TGT0010001 /* LatZip */,
+				E11TGT0100001 /* LatZipTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		E11RSCBP0010001 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E11BF0130001 /* Assets.xcassets in Resources */,
+				E11BF0140001 /* Localizable.strings in Resources */,
+				E11BF0150001 /* Localizable.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		E11SRCBP0010001 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E11BF0010001 /* LatZipApp.swift in Sources */,
+				E11BF0160001 /* ArchiveEntryRecord.swift in Sources */,
+				E11BF0170001 /* ArchiveIndex.swift in Sources */,
+				E11BF0180001 /* ArchiveFormatCapabilities.swift in Sources */,
+				E11BF0650001 /* AppLanguage.swift in Sources */,
+				E11BF0030001 /* ArchiveNode.swift in Sources */,
+				E11BF0040001 /* ArchiveTreeBuilder.swift in Sources */,
+				E11BF0190001 /* ArchivePathSanitizer.swift in Sources */,
+				E11BF0200001 /* ArchiveReaderService.swift in Sources */,
+				E11BF0210001 /* ArchiveWriterService.swift in Sources */,
+				E11BF0220001 /* ArchiveExtractionService.swift in Sources */,
+				E11BF0230001 /* TemporaryWorkspaceService.swift in Sources */,
+				E11BF0240001 /* FormatSupportService.swift in Sources */,
+				E11BF0260001 /* ArchiveAppState.swift in Sources */,
+				E11BF0250001 /* ArchiveWorkspaceViewModel.swift in Sources */,
+				E11BF0080001 /* MainArchiveShellView.swift in Sources */,
+				E11BF0400001 /* ArchiveWorkspaceView.swift in Sources */,
+				E11BF0090001 /* QuickLookPreviewRepresentable.swift in Sources */,
+				E11BF0340001 /* FileTypeIcon.swift in Sources */,
+				E11BF0350001 /* ArchiveSidebarPanel.swift in Sources */,
+				E11BF0370001 /* ArchiveFileListTable.swift in Sources */,
+				E11BF0380001 /* ArchivePreviewInspectorPanel.swift in Sources */,
+				E11BF0500001 /* AppColors.swift in Sources */,
+				E11BF0510001 /* AppSpacing.swift in Sources */,
+				E11BF0520001 /* AppTypography.swift in Sources */,
+				E11BF0530001 /* AppRadius.swift in Sources */,
+				E11BF0540001 /* AppShadows.swift in Sources */,
+				E11BF0550001 /* AppAnimations.swift in Sources */,
+				E11BF0560001 /* View+AppStyles.swift in Sources */,
+				E11BF0570001 /* SidebarSectionView.swift in Sources */,
+				E11BF0580001 /* SidebarItemView.swift in Sources */,
+				E11BF0590001 /* ColumnHeaderView.swift in Sources */,
+				E11BF05A0001 /* FileRowView.swift in Sources */,
+				E11BF05B0001 /* MetadataRowView.swift in Sources */,
+				E11BF05C0001 /* PanelCardView.swift in Sources */,
+				E11BF05D0001 /* PreviewPanelView.swift in Sources */,
+				E11BF05E0001 /* EmptyStateView.swift in Sources */,
+				E11BF05F0001 /* FileListSkeletonView.swift in Sources */,
+				E11BF0600001 /* SearchFieldView.swift in Sources */,
+				E11BF0610001 /* AppToolbarButton.swift in Sources */,
+				E11BF0620001 /* BreadcrumbView.swift in Sources */,
+				E11BF0630001 /* StatusBarView.swift in Sources */,
+				E11BF0640001 /* PreferencesView.swift in Sources */,
+				E11BF0100001 /* ArchiveEngine.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E11SRCBPTST001 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E11BF0660001 /* ArchiveExtractionServiceTests.swift in Sources */,
+				E11BF0300001 /* ArchivePathSanitizerTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		E11PRJDBG001 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 13.5;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		E11PRJREL001 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 13.5;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+			};
+			name = Release;
+		};
+		E11TGTDBG001 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				MACOSX_DEPLOYMENT_TARGET = 13.5;
+				ARCHS = "$(ARCHS_STANDARD)";
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = "";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "";
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = LatZip/InfoAdditions.plist;
+				INFOPLIST_KEY_CFBundleGetInfoString = "LatZip archive browser";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2026. MIT.";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-larchive",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.latzip.LatZip;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "LatZip/LatZip-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/LatZip/Vendor/libarchive";
+				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/LatZip/CBridge";
+			};
+			name = Debug;
+		};
+		E11TGTREL001 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				MACOSX_DEPLOYMENT_TARGET = 13.5;
+				ARCHS = "$(ARCHS_STANDARD)";
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = "";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "";
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = LatZip/InfoAdditions.plist;
+				INFOPLIST_KEY_CFBundleGetInfoString = "LatZip archive browser";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2026. MIT.";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-larchive",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.latzip.LatZip;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "LatZip/LatZip-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/LatZip/Vendor/libarchive";
+				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/LatZip/CBridge";
+			};
+			name = Release;
+		};
+		E11TGTTSTDBG001 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 13.5;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.latzip.LatZipTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/LatZip.app/Contents/MacOS/LatZip";
+			};
+			name = Debug;
+		};
+		E11TGTTSTREL001 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 13.5;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.latzip.LatZipTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/LatZip.app/Contents/MacOS/LatZip";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		E11PRJCONFLS001 /* Build configuration list for PBXProject "LatZip" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E11PRJDBG001 /* Debug */,
+				E11PRJREL001 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E11TGTCONFLS001 /* Build configuration list for PBXNativeTarget "LatZip" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E11TGTDBG001 /* Debug */,
+				E11TGTREL001 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E11TGTCONFTST001 /* Build configuration list for PBXNativeTarget "LatZipTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E11TGTTSTDBG001 /* Debug */,
+				E11TGTTSTREL001 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = E11PRJ0010001 /* Project object */;
+}

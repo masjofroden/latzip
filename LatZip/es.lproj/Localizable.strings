@@ -1,0 +1,185 @@
+/* LatZip — Español */
+
+"menu.file" = "Archivo";
+"menu.archive" = "Archivo comprimido";
+"menu.open_archive" = "Abrir archivo comprimido…";
+"menu.new_empty_zip" = "ZIP vacío nuevo…";
+"menu.extract" = "Extraer…";
+"menu.extract_to_folder" = "Extraer a carpeta…";
+"menu.extract_here" = "Extraer aquí";
+"menu.extract_all_to_folder" = "Extraer todo a carpeta…";
+"menu.extract_all_here" = "Extraer todo aquí";
+"menu.add_files" = "Añadir archivos…";
+"menu.protect_zip" = "Proteger con contraseña…";
+"menu.open_nested" = "Abrir comprimido en pestaña nueva";
+
+"toolbar.extract" = "Extraer";
+"toolbar.extract_all" = "Extraer todo";
+"toolbar.add" = "Añadir";
+"toolbar.add.help" = "Añade ficheros o carpetas en la carpeta actual dentro del ZIP";
+"toolbar.protect_zip" = "Contraseña";
+"toolbar.protect_zip.help" = "Protege este ZIP con contraseña (vuelve a cifrar todas las entradas)";
+"toolbar.add_help_zip_only" = "Añadir solo está disponible para archivos .zip.";
+"toolbar.close_tab" = "Cerrar pestaña";
+"toolbar.close_tab_help" = "Cierra la pestaña actual";
+"toolbar.up" = "Carpeta superior";
+"toolbar.ql" = "Vista rápida";
+"toolbar.ql.help" = "Vista rápida de la selección (Espacio)";
+"toolbar.open" = "Abrir";
+"toolbar.open.help" = "Abrir otro archivo en una pestaña nueva";
+"toolbar.extract.help" = "Extraer selección: elegir carpeta o extraer junto al archivo";
+"toolbar.extract_all.help" = "Extraer todo: elegir carpeta o extraer junto al archivo";
+"toolbar.up.help" = "Ir a la carpeta superior";
+"toolbar.sort" = "Ordenar";
+"toolbar.sort.help" = "Ordenar la lista de archivos";
+"toolbar.preview_panel" = "Vista previa";
+"toolbar.preview_panel.help" = "Mostrar u ocultar la columna de vista previa";
+"toolbar.favorite" = "Favorito";
+"toolbar.favorite.add_help" = "Añadir este archivo a favoritos";
+"toolbar.favorite.remove_help" = "Quitar de favoritos";
+
+"sidebar.recents" = "Recientes";
+"sidebar.favorites" = "Favoritos";
+"sidebar.structure" = "Archivo";
+"sidebar.favorite_remove" = "Quitar de favoritos";
+
+"welcome.title" = "LatZip";
+"welcome.subtitle" = "Explora ZIP, TAR, 7z y más sin descomprimir todo.";
+"welcome.open_button" = "Abrir archivo comprimido…";
+"welcome.new_zip_button" = "ZIP vacío nuevo…";
+"welcome.drop_title" = "Suelta un archivo comprimido";
+"welcome.drop_subtitle" = "O usa Archivo › Abrir archivo comprimido.";
+"welcome.drop_active" = "Suelta para abrir";
+"welcome.recents" = "Recientes";
+
+"sidebar.folders" = "Carpetas";
+
+"search.placeholder" = "Buscar";
+"search.scope_all" = "Todo el archivo";
+"search.scope_all_short" = "Todo";
+
+"col.name" = "Nombre";
+"col.size" = "Tamaño";
+"col.compressed" = "Comprimido";
+"col.compressed.placeholder" = "—";
+"col.compressed.hint" = "El tamaño comprimido aparecerá cuando el lector lo exponga.";
+"col.modified" = "Modificación";
+
+"preview.title" = "Vista previa";
+"preview.toggle" = "Mostrar vista previa";
+"preview.disabled_title" = "Vista previa oculta";
+"preview.disabled_subtitle" = "Activa la vista previa para ver Quick Look aquí.";
+"preview.none_selected" = "Sin selección";
+"preview.panel_subtitle" = "Vista rápida";
+"preview.pick_file" = "Selecciona un archivo para previsualizar";
+
+"inspector.toggle" = "Mostrar inspector";
+"inspector.compressed" = "Comprimido";
+"inspector.metadata_section" = "Detalles";
+"inspector.path" = "Ruta";
+"inspector.size" = "Tamaño";
+"inspector.kind" = "Tipo";
+"inspector.modified" = "Modificación";
+"inspector.empty" = "Selecciona un elemento";
+"inspector.format" = "Formato";
+"inspector.editing" = "Edición";
+
+"kind.folder" = "Carpeta";
+"kind.file" = "Archivo";
+
+"generic.yes" = "Sí";
+"generic.no" = "No";
+
+"menu.preview" = "Vista previa";
+"menu.extract_selection" = "Extraer selección";
+"menu.add_favorite" = "Añadir a favoritos";
+"menu.remove_favorite" = "Quitar de favoritos";
+
+"status.entries_n" = "Entradas: %lld";
+"status.bytes" = "Sin comprimir: %@";
+"status.format_line" = "Formato: %@ · Filtro: %@";
+"status.edit_zip" = "ZIP — edición habilitada";
+"status.edit_readonly" = "Solo lectura";
+"status.folder_items" = "%lld elementos aquí";
+"status.folder_bytes" = "%@ en esta carpeta";
+
+"panel.open_archive" = "Selecciona un archivo comprimido";
+"panel.extract_to_folder" = "Elegir carpeta de destino";
+"panel.extract_all_folder" = "Extraer todo en…";
+"panel.add_items" = "Añadir al ZIP";
+"panel.new_zip" = "Crear archivo ZIP";
+
+"new_zip.default_name" = "Archivo";
+
+"error.drag_empty" = "No hay nada que exportar.";
+
+"password.title" = "Archivo cifrado";
+"password.body" = "Introduce la contraseña para leer este archivo. Solo se mantiene en memoria durante esta sesión si eliges «Recordar».";
+"password.field" = "Contraseña";
+"password.remember_session" = "Recordar durante esta sesión";
+
+"action.cancel" = "Cancelar";
+"action.unlock" = "Desbloquear";
+
+"extraction.progress" = "Extrayendo…";
+"extraction.progress_hint" = "Puedes cancelar; los archivos ya escritos permanecen en disco.";
+
+"empty.not_loaded_title" = "Sin datos";
+"empty.not_loaded_subtitle" = "Espera a que termine de cargar el archivo.";
+"empty.no_files_title" = "No hay archivos";
+"empty.no_files_subtitle" = "Esta carpeta está vacía.";
+"empty.search_no_results" = "Prueba otra búsqueda o limpia el filtro.";
+
+"state.loading_archive" = "Cargando archivo…";
+
+"drop.add_to_archive" = "Suelta para añadir al archivo";
+
+"action.dismiss" = "Cerrar";
+
+"alert.error_title" = "Error";
+
+"error.needs_password" = "Este archivo requiere contraseña.";
+"error.empty_archive" = "El archivo parece vacío o no se pudo indexar.";
+"error.list_code %lld" = "No se pudo leer el archivo (código %lld).";
+"error.extract_code %lld" = "La extracción falló (código %lld).";
+"error.extract_generic" = "La extracción falló.";
+"error.extraction_cancelled" = "Extracción cancelada.";
+"error.append_unknown" = "No se pudo actualizar el ZIP.";
+"error.not_zip_edit" = "La edición en esta versión está limitada a archivos ZIP.";
+"error.add_requires_zip" = "«Añadir» solo está soportado para .zip.";
+"error.zip_write_generic" = "No se pudo escribir el ZIP.";
+
+"toast.preview_failed" = "No se pudo preparar la vista previa.";
+"toast.extracted_n" = "%lld elementos extraídos.";
+"toast.extraction_cancelled" = "Cancelado.";
+"toast.edit_not_supported" = "La edición no está soportada para este formato.";
+"toast.added_n" = "Se añadieron %lld elementos.";
+"toast.zip_protected" = "El ZIP quedó protegido con contraseña.";
+
+"protect_zip.title" = "Proteger ZIP";
+"protect_zip.body" = "Todas las entradas se reescribirán cifradas. Si el archivo ya estaba cifrado, usa la misma contraseña con la que lo abres.";
+"protect_zip.password" = "Contraseña";
+"protect_zip.confirm" = "Confirmar contraseña";
+"protect_zip.apply" = "Aplicar";
+
+"error.password_mismatch" = "Las contraseñas no coinciden.";
+"error.password_empty" = "Introduce una contraseña.";
+
+"prefs.tab_general" = "General";
+"prefs.extraction_section" = "Extracción";
+"prefs.extraction_collision" = "Si el archivo ya existe";
+"prefs.collision.keep_both" = "Conservar ambos (renombrar)";
+"prefs.collision.replace" = "Reemplazar";
+"prefs.collision.skip" = "Omitir";
+"prefs.extraction_footer" = "Se usa en Extraer, Extraer aquí y Extraer todo de la barra de herramientas y del menú Archivo comprimido.";
+"prefs.extraction_collision_prompt_footer" = "Si no hay conflicto en disco, se usa esta opción por defecto sin mostrar un panel.";
+
+"collision.alert_title" = "Ya existen archivos";
+"collision.alert_message" = "Algunos elementos coincidirían con archivos o carpetas que ya están en el destino. Elige qué hacer solo para esta extracción. Cancelar no cambia nada.";
+
+"prefs.language_section" = "Idioma";
+"prefs.app_language" = "Idioma de la aplicación";
+"prefs.language.system" = "Según el sistema";
+"prefs.language.en" = "Inglés";
+"prefs.language.es" = "Español";
+"prefs.language.relaunch_footer" = "La aplicación se cerrará y volverá a abrir para aplicar el idioma.";

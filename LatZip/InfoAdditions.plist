@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleDocumentTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeName</key>
+			<string>Compressed Archive</string>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+			<key>LSHandlerRank</key>
+			<string>Alternate</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>public.zip-archive</string>
+				<string>public.tar-archive</string>
+				<string>org.gnu.gnu-tar-archive</string>
+				<string>org.7-zip.7-zip-archive</string>
+				<string>com.rarlab.rar-archive</string>
+				<string>org.gnu.gnu-gzip-archive</string>
+				<string>org.bzip2.bzip2-archive</string>
+				<string>public.xz-archive</string>
+			</array>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>zip</string>
+				<string>jar</string>
+				<string>war</string>
+				<string>ear</string>
+				<string>rar</string>
+				<string>7z</string>
+				<string>tar</string>
+				<string>gz</string>
+				<string>tgz</string>
+				<string>bz2</string>
+				<string>tbz2</string>
+				<string>xz</string>
+				<string>txz</string>
+				<string>zst</string>
+				<string>lzma</string>
+				<string>cpio</string>
+			</array>
+		</dict>
+	</array>
+</dict>
+</plist>
