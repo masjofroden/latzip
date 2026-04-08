@@ -5,7 +5,7 @@
 
 import SwiftUI
 
-/// Columna izquierda: recientes, favoritos y árbol del archivo.
+/// Sidebar translúcido: recientes, favoritos y árbol del archivo.
 struct ArchiveSidebarPanel: View {
     @EnvironmentObject private var app: ArchiveAppState
     @ObservedObject var viewModel: ArchiveWorkspaceViewModel
@@ -80,10 +80,11 @@ struct ArchiveSidebarPanel: View {
         }
         .listStyle(.sidebar)
         .scrollContentBackground(.hidden)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background {
             ZStack {
                 Rectangle()
-                    .fill(.ultraThinMaterial)
+                    .fill(CuratorDesignTokens.sidebarMaterial)
                 LinearGradient(
                     colors: [AppColors.sidebarGradientTop, Color.clear],
                     startPoint: .top,
@@ -93,7 +94,7 @@ struct ArchiveSidebarPanel: View {
             }
         }
         .navigationTitle(viewModel.displayTitle)
-        .navigationSplitViewColumnWidth(min: 204, ideal: 236, max: 304)
+        .navigationSplitViewColumnWidth(min: 220, ideal: 260, max: 300)
     }
 
     private func sidebarLeafIcon(for node: ArchiveNode) -> String {

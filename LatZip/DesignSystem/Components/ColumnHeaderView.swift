@@ -5,13 +5,14 @@
 
 import SwiftUI
 
-/// Cabecera de columna ordenable en la lista de archivos.
+/// Botón de cabecera ordenable. Sin `maxHeight: .infinity` (provocaba filas de header gigantes en el `VStack`).
 struct ColumnHeaderView: View {
     let title: String
-    let trailing: Bool
+    let sortChevronLeading: Bool
     let isSortActive: Bool
     let sortAscending: Bool
     let helpText: String
+    let contentAlignment: Alignment
     let action: () -> Void
 
     @State private var isHovered = false
@@ -22,27 +23,34 @@ struct ColumnHeaderView: View {
                 action()
             }
         } label: {
-            HStack(spacing: AppSpacing.xs) {
-                if trailing { Spacer(minLength: 0) }
-                if isSortActive && trailing {
-                    sortChevron
+            Group {
+                if sortChevronLeading {
+                    HStack(spacing: AppSpacing.xs) {
+                        if isSortActive { sortChevron }
+                        Text(title)
+                            .lineLimit(1)
+                    }
+                } else {
+                    HStack(spacing: AppSpacing.xs) {
+                        Text(title)
+                            .lineLimit(1)
+                        if isSortActive { sortChevron }
+                    }
                 }
-                Text(title)
-                if isSortActive && !trailing {
-                    sortChevron
-                }
-                if !trailing { Spacer(minLength: 0) }
             }
             .font(AppTypography.columnHeader)
             .foregroundStyle(labelForeground)
-            .frame(maxWidth: .infinity, alignment: trailing ? .trailing : .leading)
-            .padding(.vertical, AppSpacing.sm)
+            .frame(maxWidth: .infinity, alignment: contentAlignment)
+            .padding(.vertical, 6)
             .background {
                 RoundedRectangle(cornerRadius: AppRadius.small, style: .continuous)
                     .fill(isHovered ? AppColors.crumbIdleFill : Color.clear)
             }
+            .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
+        // Altura intrínseca del label; no expandir en vertical dentro del `HStack` del header.
+        .fixedSize(horizontal: false, vertical: true)
         .help(helpText)
         .onHover { isHovered = $0 }
         .animation(AppAnimation.quick, value: isHovered)

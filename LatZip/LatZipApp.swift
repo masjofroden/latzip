@@ -8,19 +8,28 @@ import SwiftUI
 @main
 struct LatZipApp: App {
     @StateObject private var appState = ArchiveAppState()
+    @NSApplicationDelegateAdaptor(LatZipAppDelegate.self) private var appDelegate
 
     init() {
         ArchiveAppState.applyLaunchLanguageFromUserDefaults()
+        AppAppearance.applyToSharedApplication(
+            AppAppearance(persisted: UserDefaults.standard.string(forKey: AppAppearance.storageKey))
+        )
     }
 
     var body: some Scene {
         WindowGroup {
             MainArchiveShellView()
                 .environmentObject(appState)
+                .preferredColorScheme(appState.preferredColorScheme)
+                .onAppear {
+                    appDelegate.bind(appState: appState)
+                }
         }
         Settings {
             PreferencesView()
                 .environmentObject(appState)
+                .preferredColorScheme(appState.preferredColorScheme)
         }
         .commands {
             CommandGroup(replacing: .newItem) {
@@ -68,6 +77,12 @@ struct LatZipApp: App {
                     appState.selectedWorkspace?.presentProtectZipSheet()
                 }
                 .keyboardShortcut("p", modifiers: [.command, .shift])
+                .disabled(appState.selectedWorkspace?.formatCaps?.supportsZipPassphrase != true)
+            }
+            CommandGroup(after: .help) {
+                Button(String(localized: "help.shortcuts_menu")) {
+                    appState.showKeyboardShortcuts = true
+                }
             }
         }
     }

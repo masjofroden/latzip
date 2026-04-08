@@ -3,7 +3,7 @@
 "menu.file" = "Archivo";
 "menu.archive" = "Archivo comprimido";
 "menu.open_archive" = "Abrir archivo comprimido…";
-"menu.new_empty_zip" = "ZIP vacío nuevo…";
+"menu.new_empty_zip" = "Archivo comprimido nuevo…";
 "menu.extract" = "Extraer…";
 "menu.extract_to_folder" = "Extraer a carpeta…";
 "menu.extract_here" = "Extraer aquí";
@@ -14,13 +14,19 @@
 "menu.open_nested" = "Abrir comprimido en pestaña nueva";
 
 "toolbar.extract" = "Extraer";
+"toolbar.extract_primary" = "Extraer";
+"toolbar.extract_primary.help" = "Extrae la selección a una carpeta, o el archivo completo si no hay selección.";
+"toolbar.view_list" = "Vista en lista";
+"toolbar.view_grid" = "Vista en cuadrícula";
 "toolbar.extract_all" = "Extraer todo";
 "toolbar.add" = "Añadir";
 "toolbar.add.help" = "Añade ficheros o carpetas en la carpeta actual dentro del ZIP";
 "toolbar.protect_zip" = "Contraseña";
-"toolbar.protect_zip.help" = "Protege este ZIP con contraseña (vuelve a cifrar todas las entradas)";
-"toolbar.add_help_zip_only" = "Añadir solo está disponible para archivos .zip.";
+"toolbar.protect_zip.help" = "Reescribe el ZIP con contraseña usando cifrado AES-256 (estilo WinZip), sin cifrado Zip tradicional.";
+"toolbar.add_help_zip_only" = "Añadir solo está disponible en formatos editables (ZIP, TAR, 7z, etc.).";
 "toolbar.close_tab" = "Cerrar pestaña";
+"tabs.strip.accessibility" = "Documentos abiertos";
+"tabs.close.accessibility" = "Cerrar pestaña";
 "toolbar.close_tab_help" = "Cierra la pestaña actual";
 "toolbar.up" = "Carpeta superior";
 "toolbar.ql" = "Vista rápida";
@@ -46,7 +52,7 @@
 "welcome.title" = "LatZip";
 "welcome.subtitle" = "Explora ZIP, TAR, 7z y más sin descomprimir todo.";
 "welcome.open_button" = "Abrir archivo comprimido…";
-"welcome.new_zip_button" = "ZIP vacío nuevo…";
+"welcome.new_zip_button" = "Archivo comprimido nuevo…";
 "welcome.drop_title" = "Suelta un archivo comprimido";
 "welcome.drop_subtitle" = "O usa Archivo › Abrir archivo comprimido.";
 "welcome.drop_active" = "Suelta para abrir";
@@ -60,6 +66,7 @@
 
 "col.name" = "Nombre";
 "col.size" = "Tamaño";
+"col.type" = "Tipo";
 "col.compressed" = "Comprimido";
 "col.compressed.placeholder" = "—";
 "col.compressed.hint" = "El tamaño comprimido aparecerá cuando el lector lo exponga.";
@@ -83,6 +90,12 @@
 "inspector.empty" = "Selecciona un elemento";
 "inspector.format" = "Formato";
 "inspector.editing" = "Edición";
+"inspector.created" = "Creado";
+"inspector.dimensions" = "Dimensiones";
+"inspector.value_unavailable" = "—";
+"inspector.share_archive" = "Compartir archivo";
+
+"curator.encrypted_badge" = "Cifrado";
 
 "kind.folder" = "Carpeta";
 "kind.file" = "Archivo";
@@ -98,7 +111,7 @@
 "status.entries_n" = "Entradas: %lld";
 "status.bytes" = "Sin comprimir: %@";
 "status.format_line" = "Formato: %@ · Filtro: %@";
-"status.edit_zip" = "ZIP — edición habilitada";
+"status.edit_zip" = "Edición habilitada";
 "status.edit_readonly" = "Solo lectura";
 "status.folder_items" = "%lld elementos aquí";
 "status.folder_bytes" = "%@ en esta carpeta";
@@ -107,7 +120,7 @@
 "panel.extract_to_folder" = "Elegir carpeta de destino";
 "panel.extract_all_folder" = "Extraer todo en…";
 "panel.add_items" = "Añadir al ZIP";
-"panel.new_zip" = "Crear archivo ZIP";
+"panel.new_zip" = "Crear archivo comprimido";
 
 "new_zip.default_name" = "Archivo";
 
@@ -117,12 +130,59 @@
 "password.body" = "Introduce la contraseña para leer este archivo. Solo se mantiene en memoria durante esta sesión si eliges «Recordar».";
 "password.field" = "Contraseña";
 "password.remember_session" = "Recordar durante esta sesión";
+"password.save_keychain" = "Guardar contraseña en el Llavero para este archivo";
+"password.save_keychain.help" = "Solo en este Mac, asociada a la ruta del archivo. Desactívalo en Ajustes → Seguridad.";
+"password.keychain_hint" = "Si guardas aquí, la próxima vez puede abrirse solo. Las contraseñas incorrectas se pueden borrar en Acceso a Llavero.";
+
+"prefs.security_section" = "Seguridad";
+"prefs.keychain_archive_passwords" = "Permitir guardar contraseñas de archivos en el Llavero";
+"prefs.keychain_footer" = "Si está activo, la hoja de desbloqueo puede guardar la contraseña para esa ruta. Desactivar esto no borra lo ya guardado (bórralo en Acceso a Llavero si hace falta). «Proteger ZIP» también actualiza la contraseña guardada cuando esto está activo.";
 
 "action.cancel" = "Cancelar";
 "action.unlock" = "Desbloquear";
 
 "extraction.progress" = "Extrayendo…";
 "extraction.progress_hint" = "Puedes cancelar; los archivos ya escritos permanecen en disco.";
+"extraction.file_progress" = "%1$d / %2$d · %3$@";
+"extraction.eta_remaining" = "Quedan ~%@";
+"extraction.eta.seconds" = "%d s";
+"extraction.eta.minutes" = "%d min";
+
+"search.regex_short" = "Regex";
+"search.regex_help" = "Interpreta el campo de búsqueda como expresión regular (nombre, o ruta completa si buscas en todo el archivo).";
+"search.regex_invalid_help" = "Expresión regular no válida.";
+"search.filters_help" = "Filtro por tamaño (MB; solo aplica a archivos; las carpetas siguen visibles).";
+"search.filters_title" = "Filtros de búsqueda";
+"search.filters_size_hint" = "Opcional. Separador decimal: punto o coma.";
+"search.min_mb" = "Mín (MB)";
+"search.max_mb" = "Máx (MB)";
+
+"caps.more_info" = "Más información";
+"caps.readonly" = "Este archivo es solo lectura en LatZip: puedes explorar y extraer, pero no añadir ni modificar el formato.";
+"caps.editable_non_zip" = "Puedes añadir archivos. La protección con contraseña (AES-256) solo está disponible en .zip.";
+"caps.zip_full" = "Puedes añadir archivos y proteger el ZIP con contraseña (AES-256).";
+
+"help.formats_title" = "Formatos y límites";
+"help.formats_body" = "LatZip usa el libarchive del sistema para listar y extraer. Suele funcionar bien con ZIP, TAR, 7z, RAR (según compilación), ISO 9660, CPIO, AR, CAB, LHA/LZH, XAR, DEB, WARC, y compresiones habituales (gzip, bzip2, xz, zstd, lzma, Unix .Z).\n\nImágenes de disco y volúmenes crudos (DMG, VMDK, QCOW2, NTFS/APFS como disco completo, etc.) no se abren como «archivos comprimidos» con libarchive. Si algo no abre, probablemente haga falta otra herramienta.\n\n«Proteger con contraseña» reescribe solo archivos .zip con AES-256 estilo WinZip cuando tu libarchive lo admite.";
+"help.shortcuts_menu" = "Atajos de teclado…";
+"help.shortcuts_title" = "Atajos de teclado";
+"help.sk.new_archive" = "Archivo comprimido nuevo";
+"help.sk.open" = "Abrir archivo comprimido";
+"help.sk.extract_folder" = "Extraer selección — elegir carpeta";
+"help.sk.extract_here" = "Extraer selección — aquí";
+"help.sk.extract_all_folder" = "Extraer todo — elegir carpeta";
+"help.sk.extract_all_here" = "Extraer todo — aquí";
+"help.sk.add_files" = "Añadir archivos";
+"help.sk.protect_zip" = "Proteger ZIP con contraseña";
+"help.sk.preview" = "Vista previa Quick Look de la selección";
+"help.sk.space" = "Barra espaciadora";
+"help.sk.prefs" = "Ajustes";
+
+"action.close" = "Cerrar";
+
+"a11y.role_folder" = "carpeta";
+"a11y.role_file" = "archivo";
+"a11y.modified_suffix" = ", modificado %@";
 
 "empty.not_loaded_title" = "Sin datos";
 "empty.not_loaded_subtitle" = "Espera a que termine de cargar el archivo.";
@@ -145,9 +205,10 @@
 "error.extract_generic" = "La extracción falló.";
 "error.extraction_cancelled" = "Extracción cancelada.";
 "error.append_unknown" = "No se pudo actualizar el ZIP.";
-"error.not_zip_edit" = "La edición en esta versión está limitada a archivos ZIP.";
+"error.not_zip_edit" = "Esa ruta no usa un formato que LatZip pueda crear o modificar (elige extensión .zip, .tar, .7z, .tar.gz, etc.).";
 "error.add_requires_zip" = "«Añadir» solo está soportado para .zip.";
 "error.zip_write_generic" = "No se pudo escribir el ZIP.";
+"error.zip_aes256_unavailable" = "El sistema no pudo aplicar cifrado ZIP AES-256 (comprueba la versión de libarchive o el soporte del equipo).";
 
 "toast.preview_failed" = "No se pudo preparar la vista previa.";
 "toast.extracted_n" = "%lld elementos extraídos.";
@@ -157,7 +218,7 @@
 "toast.zip_protected" = "El ZIP quedó protegido con contraseña.";
 
 "protect_zip.title" = "Proteger ZIP";
-"protect_zip.body" = "Todas las entradas se reescribirán cifradas. Si el archivo ya estaba cifrado, usa la misma contraseña con la que lo abres.";
+"protect_zip.body" = "Todas las entradas se reescriben con AES-256. Si el archivo ya estaba cifrado, usa la misma contraseña con la que lo abres.";
 "protect_zip.password" = "Contraseña";
 "protect_zip.confirm" = "Confirmar contraseña";
 "protect_zip.apply" = "Aplicar";
@@ -165,7 +226,11 @@
 "error.password_mismatch" = "Las contraseñas no coinciden.";
 "error.password_empty" = "Introduce una contraseña.";
 
-"prefs.tab_general" = "General";
+"prefs.tab_extraction" = "Extracción";
+"prefs.tab_language" = "Idioma";
+"prefs.tab_appearance" = "Apariencia";
+"prefs.tab_security" = "Seguridad";
+"prefs.tab_help" = "Ayuda";
 "prefs.extraction_section" = "Extracción";
 "prefs.extraction_collision" = "Si el archivo ya existe";
 "prefs.collision.keep_both" = "Conservar ambos (renombrar)";
@@ -183,3 +248,17 @@
 "prefs.language.en" = "Inglés";
 "prefs.language.es" = "Español";
 "prefs.language.relaunch_footer" = "La aplicación se cerrará y volverá a abrir para aplicar el idioma.";
+
+"prefs.appearance.section" = "Apariencia";
+"prefs.appearance.label" = "Estilo de interfaz";
+"prefs.appearance.system" = "Según el sistema";
+"prefs.appearance.light" = "Claro";
+"prefs.appearance.dark" = "Oscuro";
+"prefs.appearance.footer" = "Con «Según el sistema», LatZip usa el modo claro u oscuro definido en Ajustes del Sistema de macOS.";
+
+"prefs.help_section" = "Ayuda";
+"prefs.show_shortcuts" = "Atajos de teclado…";
+"prefs.help_shortcuts_footer" = "La misma lista que en el menú Ayuda. Útil si la ventana principal está cerrada.";
+"prefs.finder_service_footer" = "Finder: selecciona un archivo → Servicios → Open with LatZip (activa Servicios en Ajustes del Sistema → Teclado → Atajos de teclado → Servicios si no aparece).";
+
+"service.no_files_error" = "No se encontraron archivos en el portapapeles.";

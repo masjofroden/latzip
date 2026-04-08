@@ -26,9 +26,11 @@ struct ArchiveNode: Identifiable, Hashable, Sendable {
     static let nestedArchiveExtensions: Set<String> = [
         "zip", "jar", "war", "ear",
         "rar",
+        "iso",
         "7z",
         "tar", "gz", "tgz", "bz2", "tbz2", "xz", "zst", "lzma",
-        "cpio"
+        "cpio",
+        "ar", "cab", "deb", "rpm", "xar", "pkg", "lha", "lzh", "warc", "z",
     ]
 
     var isNestedArchiveCandidate: Bool {

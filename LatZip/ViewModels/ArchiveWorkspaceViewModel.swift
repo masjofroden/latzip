@@ -24,6 +24,10 @@ final class ArchiveWorkspaceViewModel: ObservableObject, Identifiable {
 
     @Published var searchText: String = ""
     @Published var searchEntireArchive: Bool = false
+    @Published var searchUsesRegex: Bool = false
+    @Published var searchMinSizeMBText: String = ""
+    @Published var searchMaxSizeMBText: String = ""
+    @Published private(set) var searchRegexInvalid: Bool = false
 
     @Published var sortFoldersFirst: Bool = true
     @Published var columnSort: ArchiveColumn = .name
@@ -39,14 +43,22 @@ final class ArchiveWorkspaceViewModel: ObservableObject, Identifiable {
     @Published var protectZipFormError: String?
     /// No persistido en disco — solo memoria de proceso si el usuario activa «recordar sesión».
     @Published var rememberPasswordForSession = false
+    /// Solo si la preferencia global de Llavero está activa; guarda la contraseña de este archivo al desbloquear.
+    @Published var savePasswordToKeychain = false
 
     private var sessionPassphrase: String?
 
     @Published var previewURL: URL?
     @Published var showPreviewPanel = true
+    /// Vista lista (referencia) vs cuadrícula «Curator».
+    @Published var fileListUsesGridLayout = false
+    /// Archivo abierto con contraseña o desde Llavero (badge «Encrypted» en inspector).
+    @Published private(set) var archiveOpenedWithPassphrase = false
 
     @Published var toast: String?
     @Published var activeExtractionProgress: Progress?
+    @Published private(set) var extractionProgressDetail: (current: Int, total: Int, fileName: String)?
+    @Published private(set) var extractionStartedAt: Date?
     private var extractionTask: Task<Void, Never>?
 
     private let reader = ArchiveReaderService()
@@ -54,7 +66,7 @@ final class ArchiveWorkspaceViewModel: ObservableObject, Identifiable {
     private let tempWorkspace = TemporaryWorkspaceService()
 
     enum ArchiveColumn: String, CaseIterable {
-        case name, size, compressed, modified, kind
+        case name, size, kind, modified
     }
 
     func setSort(column: ArchiveColumn, ascending: Bool? = nil) {
@@ -83,7 +95,13 @@ final class ArchiveWorkspaceViewModel: ObservableObject, Identifiable {
         loadError = nil
         defer { isLoading = false }
 
-        let pass = sessionPassphrase
+        var pass = sessionPassphrase
+        if pass == nil, ArchiveKeychainPreference.isEnabled {
+            if let stored = ArchiveKeychainService.passphrase(for: archiveURL) {
+                pass = stored
+                sessionPassphrase = stored
+            }
+        }
         do {
             let loaded = try await reader.load(archiveURL: archiveURL, passphrase: pass)
             index = loaded.index
@@ -93,6 +111,8 @@ final class ArchiveWorkspaceViewModel: ObservableObject, Identifiable {
                 formatName: loaded.formatName,
                 filterName: loaded.filterName
             )
+            let usedPass = pass.map { !$0.isEmpty } ?? false
+            archiveOpenedWithPassphrase = usedPass
             browseFolderPath = ""
             selection = []
             applyListFilterAndSort()
@@ -102,6 +122,7 @@ final class ArchiveWorkspaceViewModel: ObservableObject, Identifiable {
         } catch ArchiveLoadError.needsPassword {
             showPasswordSheet = true
             passwordField = ""
+            savePasswordToKeychain = false
         } catch {
             loadError = error.localizedDescription
         }
@@ -110,6 +131,9 @@ final class ArchiveWorkspaceViewModel: ObservableObject, Identifiable {
     func submitPassword() async {
         sessionPassphrase = passwordField.isEmpty ? nil : passwordField
         if rememberPasswordForSession {} /* explícito: credencial solo en RAM */
+        if ArchiveKeychainPreference.isEnabled, savePasswordToKeychain, let p = sessionPassphrase, !p.isEmpty {
+            ArchiveKeychainService.save(passphrase: p, for: archiveURL)
+        }
         await load(forceNewPassword: false)
     }
 
@@ -144,17 +168,36 @@ final class ArchiveWorkspaceViewModel: ObservableObject, Identifiable {
             listItems = []
             return
         }
+        if searchUsesRegex, !searchText.isEmpty {
+            searchRegexInvalid = (try? NSRegularExpression(pattern: searchText, options: [])) == nil
+        } else {
+            searchRegexInvalid = false
+        }
+
         var rows: [ArchiveEntryRecord]
-        if searchEntireArchive, !searchText.isEmpty {
-            let q = searchText.lowercased()
-            rows = index.allRecords.filter { $0.fullPath.lowercased().contains(q) }
+        if searchEntireArchive {
+            if !searchText.isEmpty {
+                rows = index.allRecords.filter { rowMatchesSearch(name: $0.name, fullPath: $0.fullPath) }
+            } else {
+                rows = index.allRecords
+            }
         } else {
             rows = index.children(ofParent: browseFolderPath)
             if !searchText.isEmpty {
-                let q = searchText.lowercased()
-                rows = rows.filter { $0.name.lowercased().contains(q) }
+                rows = rows.filter { rowMatchesSearch(name: $0.name, fullPath: $0.fullPath) }
             }
         }
+
+        let (minBytes, maxBytes) = parsedSearchSizeBounds()
+        if minBytes != nil || maxBytes != nil {
+            rows = rows.filter { r in
+                if r.isFolder { return true }
+                if let lo = minBytes, r.byteSize < lo { return false }
+                if let hi = maxBytes, r.byteSize > hi { return false }
+                return true
+            }
+        }
+
         rows.sort { a, b in
             if sortFoldersFirst, a.isFolder != b.isFolder {
                 return a.isFolder && !b.isFolder
@@ -163,7 +206,7 @@ final class ArchiveWorkspaceViewModel: ObservableObject, Identifiable {
             switch columnSort {
             case .name:
                 cmp = a.name.localizedCaseInsensitiveCompare(b.name)
-            case .size, .compressed:
+            case .size:
                 if a.byteSize == b.byteSize { cmp = .orderedSame }
                 else { cmp = a.byteSize < b.byteSize ? .orderedAscending : .orderedDescending }
             case .modified:
@@ -171,7 +214,7 @@ final class ArchiveWorkspaceViewModel: ObservableObject, Identifiable {
                 let bd = b.modified ?? .distantPast
                 cmp = ad.compare(bd)
             case .kind:
-                cmp = a.name.localizedCaseInsensitiveCompare(b.name)
+                cmp = a.curatorTypeSortKey.localizedCaseInsensitiveCompare(b.curatorTypeSortKey)
             }
             if cmp == .orderedSame { return a.fullPath < b.fullPath }
             switch (sortAscending, cmp) {
@@ -182,6 +225,44 @@ final class ArchiveWorkspaceViewModel: ObservableObject, Identifiable {
             }
         }
         listItems = rows
+    }
+
+    private func rowMatchesSearch(name: String, fullPath: String) -> Bool {
+        let haystack = searchEntireArchive ? fullPath : name
+        if searchText.isEmpty { return true }
+        if searchUsesRegex {
+            guard let re = try? NSRegularExpression(pattern: searchText, options: []) else { return false }
+            let range = NSRange(location: 0, length: (haystack as NSString).length)
+            return re.firstMatch(in: haystack, options: [], range: range) != nil
+        }
+        return haystack.lowercased().contains(searchText.lowercased())
+    }
+
+    private func parsedSearchSizeBounds() -> (min: Int64?, max: Int64?) {
+        func megabytesToBytes(_ raw: String) -> Int64? {
+            let t = raw.trimmingCharacters(in: .whitespacesAndNewlines)
+            guard !t.isEmpty else { return nil }
+            let normalized = t.replacingOccurrences(of: ",", with: ".")
+            guard let v = Double(normalized), v >= 0 else { return nil }
+            return Int64(v * 1_000_000)
+        }
+        return (megabytesToBytes(searchMinSizeMBText), megabytesToBytes(searchMaxSizeMBText))
+    }
+
+    func estimatedExtractionRemaining(at date: Date) -> String? {
+        guard let start = extractionStartedAt,
+              let d = extractionProgressDetail,
+              d.current > 0, d.current < d.total else { return nil }
+        let elapsed = date.timeIntervalSince(start)
+        guard elapsed > 0.2 else { return nil }
+        let pace = elapsed / Double(d.current)
+        let sec = pace * Double(d.total - d.current)
+        guard sec.isFinite, sec > 0.5 else { return nil }
+        if sec < 90 {
+            return String(format: String(localized: "extraction.eta.seconds"), Int(sec.rounded()))
+        }
+        let mins = Int(sec / 60)
+        return String(format: String(localized: "extraction.eta.minutes"), mins)
     }
 
     /// Doble clic / Enter: carpeta entra; fichero prepara vista previa.
@@ -340,10 +421,18 @@ final class ArchiveWorkspaceViewModel: ObservableObject, Identifiable {
         ) else { return }
 
         let progress = Progress()
+        let total = files.count
         activeExtractionProgress = progress
+        extractionProgressDetail = total > 0 ? (0, total, "") : nil
+        extractionStartedAt = Date()
         extractionTask?.cancel()
-        extractionTask = Task {
-            defer { activeExtractionProgress = nil }
+        extractionTask = Task { [weak self] in
+            guard let self else { return }
+            defer {
+                self.activeExtractionProgress = nil
+                self.extractionProgressDetail = nil
+                self.extractionStartedAt = nil
+            }
             do {
                 let n = try await ArchiveExtractionService.extract(
                     files: files,
@@ -351,7 +440,12 @@ final class ArchiveWorkspaceViewModel: ObservableObject, Identifiable {
                     passphrase: sessionPassphrase,
                     destinationDirectory: destination,
                     options: ExtractionOptions(collisionPolicy: policy),
-                    progress: progress
+                    progress: progress,
+                    onFileStart: { idx, name in
+                        Task { @MainActor in
+                            self.extractionProgressDetail = (idx, total, name)
+                        }
+                    }
                 )
                 toast = String(format: String(localized: "toast.extracted_n"), n)
             } catch is CancellationError {
@@ -366,6 +460,8 @@ final class ArchiveWorkspaceViewModel: ObservableObject, Identifiable {
         extractionTask?.cancel()
         extractionTask = nil
         activeExtractionProgress = nil
+        extractionProgressDetail = nil
+        extractionStartedAt = nil
     }
 
     func addFromFinder() {
@@ -414,6 +510,7 @@ final class ArchiveWorkspaceViewModel: ObservableObject, Identifiable {
 
     func submitProtectZipPassword() async {
         protectZipFormError = nil
+        guard formatCaps?.supportsZipPassphrase == true else { return }
         guard protectZipPassword == protectZipConfirm else {
             protectZipFormError = String(localized: "error.password_mismatch")
             return
@@ -431,6 +528,9 @@ final class ArchiveWorkspaceViewModel: ObservableObject, Identifiable {
                 newPassphrase: protectZipPassword
             )
             sessionPassphrase = protectZipPassword
+            if ArchiveKeychainPreference.isEnabled {
+                ArchiveKeychainService.save(passphrase: protectZipPassword, for: archiveURL)
+            }
             showProtectZipSheet = false
             protectZipPassword = ""
             protectZipConfirm = ""

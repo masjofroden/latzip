@@ -15,18 +15,15 @@ struct MainArchiveShellView: View {
             if app.workspaces.isEmpty {
                 welcomeDropZone
             } else {
-                TabView(selection: Binding(
-                    get: { app.selectedWorkspaceId },
-                    set: { app.selectedWorkspaceId = $0 }
-                )) {
-                    ForEach(app.workspaces) { ws in
-                        ArchiveWorkspaceView(viewModel: ws)
-                            .tabItem {
-                                Text(ws.displayTitle)
-                                    .lineLimit(1)
-                            }
-                            .tag(Optional(ws.id))
-                    }
+                VStack(spacing: 0) {
+                    WorkspaceTabStripView()
+                    workspaceArea
+                }
+                .onAppear {
+                    app.ensureValidWorkspaceSelection()
+                }
+                .onChange(of: app.workspaces.count) { _ in
+                    app.ensureValidWorkspaceSelection()
                 }
             }
         }
@@ -51,6 +48,12 @@ struct MainArchiveShellView: View {
                 app.openArchive(url: url)
             }
         }
+        .sheet(isPresented: Binding(
+            get: { app.showKeyboardShortcuts },
+            set: { app.showKeyboardShortcuts = $0 }
+        )) {
+            KeyboardShortcutsGuideView()
+        }
     }
 
     private func handleDrop(_ items: [NSItemProvider]) -> Bool {
@@ -63,6 +66,16 @@ struct MainArchiveShellView: View {
             }
         }
         return true
+    }
+
+    @ViewBuilder
+    private var workspaceArea: some View {
+        if let id = app.selectedWorkspaceId,
+           let ws = app.workspaces.first(where: { $0.id == id }) {
+            ArchiveWorkspaceView(viewModel: ws)
+                .id(ws.id)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+        }
     }
 
     private var welcomeDropZone: some View {

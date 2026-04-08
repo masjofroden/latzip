@@ -7,7 +7,7 @@ import AppKit
 import SwiftUI
 import UniformTypeIdentifiers
 
-/// Lista central: filas `FileRowView`, cabeceras `ColumnHeaderView`, design system unificado.
+/// Lista en columnas: cabecera fija (altura fija) + `ScrollView` + `LazyVStack`; columnas vía `FileListTableColumns.row`.
 struct ArchiveFileListTable: View {
     @ObservedObject var viewModel: ArchiveWorkspaceViewModel
     @EnvironmentObject private var app: ArchiveAppState
@@ -15,36 +15,30 @@ struct ArchiveFileListTable: View {
     @State private var hoveredRowID: ArchiveEntryRecord.ID?
     @State private var shiftAnchorIndex: Int?
 
-    private let colSize: CGFloat = 100
-    private let colCompressed: CGFloat = 96
-    private let colModified: CGFloat = 156
-
     private let sortHelp = String(localized: "toolbar.sort.help")
 
     var body: some View {
-        ZStack {
-            AppColors.contentBackground
-                .ignoresSafeArea(edges: .bottom)
-
-            Group {
-                if viewModel.isLoading {
-                    loadingState
-                } else if viewModel.index == nil {
-                    EmptyStateView(
-                        title: String(localized: "empty.not_loaded_title"),
-                        subtitle: String(localized: "empty.not_loaded_subtitle"),
-                        systemImage: "tray"
-                    )
-                } else if viewModel.listItems.isEmpty {
-                    emptyFolderState
-                } else {
-                    fileList
-                }
+        Group {
+            if viewModel.isLoading {
+                loadingState
+            } else if viewModel.index == nil {
+                EmptyStateView(
+                    title: String(localized: "empty.not_loaded_title"),
+                    subtitle: String(localized: "empty.not_loaded_subtitle"),
+                    systemImage: "tray"
+                )
+            } else if viewModel.listItems.isEmpty {
+                emptyFolderState
+            } else if viewModel.fileListUsesGridLayout {
+                CuratorFileGridView(viewModel: viewModel)
+            } else {
+                fileListStack
             }
-            .animation(AppAnimation.standard, value: viewModel.isLoading)
-            .animation(AppAnimation.standard, value: viewModel.listItems.count)
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+        .background(AppColors.contentBackground)
+        .animation(AppAnimation.standard, value: viewModel.isLoading)
+        .animation(AppAnimation.standard, value: viewModel.listItems.count)
         .onChange(of: viewModel.browseFolderPath) { _ in
             shiftAnchorIndex = nil
         }
@@ -59,6 +53,7 @@ struct ArchiveFileListTable: View {
             systemImage: viewModel.searchText.isEmpty ? "folder" : "magnifyingglass"
         )
         .padding(AppSpacing.xxl)
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
     }
 
     private var loadingState: some View {
@@ -71,24 +66,15 @@ struct ArchiveFileListTable: View {
             FileListSkeletonView()
                 .frame(maxWidth: 480)
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
         .padding(AppSpacing.xxl)
     }
 
-    private var fileList: some View {
+    private var fileListStack: some View {
         VStack(spacing: 0) {
-            columnHeaderRow
-                .background { AppColors.listHeaderTint }
-                .overlay(alignment: .top) {
-                    Rectangle()
-                        .fill(AppColors.separator)
-                        .frame(height: 1)
-                }
-                .overlay(alignment: .bottom) {
-                    Rectangle()
-                        .fill(AppColors.separatorStrong)
-                        .frame(height: 1)
-                }
+            fixedColumnHeader
+                .frame(height: AppLayoutMetrics.fileListHeaderHeight)
+                .frame(maxWidth: .infinity, alignment: .topLeading)
 
             ScrollView {
                 LazyVStack(spacing: 0) {
@@ -96,67 +82,79 @@ struct ArchiveFileListTable: View {
                         fileRow(index: index, item: item)
                     }
                 }
-                .padding(.top, AppLayoutMetrics.fileListSectionTop)
-                .padding(.bottom, AppSpacing.md)
+                .frame(maxWidth: .infinity, alignment: .topLeading)
             }
+            .frame(maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .topLeading)
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
     }
 
-    private var columnHeaderRow: some View {
-        HStack(alignment: .center, spacing: AppLayoutMetrics.fileListColumnGutter) {
-            HStack(alignment: .center, spacing: AppSpacing.md) {
-                Color.clear
-                    .frame(width: AppLayoutMetrics.fileListIconColumnWidth, height: 1)
-                    .accessibilityHidden(true)
+    private var fixedColumnHeader: some View {
+        FileListTableColumns.row(
+            icon: Color.clear
+                .frame(
+                    width: AppLayoutMetrics.fileListIconColumnWidth,
+                    height: AppLayoutMetrics.fileListIconColumnWidth
+                )
+                .accessibilityHidden(true),
+            name: {
                 ColumnHeaderView(
                     title: String(localized: "col.name"),
-                    trailing: false,
+                    sortChevronLeading: false,
                     isSortActive: viewModel.columnSort == .name,
                     sortAscending: viewModel.sortAscending,
-                    helpText: sortHelp
-                ) {
-                    viewModel.setSort(column: .name, ascending: nil)
-                }
-                .frame(maxWidth: .infinity, alignment: .leading)
+                    helpText: sortHelp,
+                    contentAlignment: .leading,
+                    action: { viewModel.setSort(column: .name, ascending: nil) }
+                )
+            },
+            size: {
+                ColumnHeaderView(
+                    title: String(localized: "col.size"),
+                    sortChevronLeading: true,
+                    isSortActive: viewModel.columnSort == .size,
+                    sortAscending: viewModel.sortAscending,
+                    helpText: sortHelp,
+                    contentAlignment: .trailing,
+                    action: { viewModel.setSort(column: .size, ascending: nil) }
+                )
+            },
+            type: {
+                ColumnHeaderView(
+                    title: String(localized: "col.type"),
+                    sortChevronLeading: true,
+                    isSortActive: viewModel.columnSort == .kind,
+                    sortAscending: viewModel.sortAscending,
+                    helpText: sortHelp,
+                    contentAlignment: .leading,
+                    action: { viewModel.setSort(column: .kind, ascending: nil) }
+                )
+            },
+            modified: {
+                ColumnHeaderView(
+                    title: String(localized: "col.modified"),
+                    sortChevronLeading: true,
+                    isSortActive: viewModel.columnSort == .modified,
+                    sortAscending: viewModel.sortAscending,
+                    helpText: sortHelp,
+                    contentAlignment: .leading,
+                    action: { viewModel.setSort(column: .modified, ascending: nil) }
+                )
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(.leading, AppLayoutMetrics.fileListLeading)
-
-            ColumnHeaderView(
-                title: String(localized: "col.size"),
-                trailing: true,
-                isSortActive: viewModel.columnSort == .size,
-                sortAscending: viewModel.sortAscending,
-                helpText: sortHelp
-            ) {
-                viewModel.setSort(column: .size, ascending: nil)
-            }
-            .frame(width: colSize, alignment: .trailing)
-
-            ColumnHeaderView(
-                title: String(localized: "col.compressed"),
-                trailing: true,
-                isSortActive: viewModel.columnSort == .compressed,
-                sortAscending: viewModel.sortAscending,
-                helpText: sortHelp
-            ) {
-                viewModel.setSort(column: .compressed, ascending: nil)
-            }
-            .frame(width: colCompressed, alignment: .trailing)
-
-            ColumnHeaderView(
-                title: String(localized: "col.modified"),
-                trailing: true,
-                isSortActive: viewModel.columnSort == .modified,
-                sortAscending: viewModel.sortAscending,
-                helpText: sortHelp
-            ) {
-                viewModel.setSort(column: .modified, ascending: nil)
-            }
-            .frame(width: colModified, alignment: .trailing)
-            .padding(.trailing, AppLayoutMetrics.fileListLeading)
+        )
+        .padding(.vertical, 4)
+        .background { AppColors.listHeaderTint }
+        .overlay(alignment: .top) {
+            Rectangle()
+                .fill(AppColors.separator)
+                .frame(height: 1)
         }
-        .padding(.vertical, AppSpacing.sm)
+        .overlay(alignment: .bottom) {
+            Rectangle()
+                .fill(AppColors.separatorStrong)
+                .frame(height: 1)
+        }
+        .clipped()
     }
 
     private func fileRow(index: Int, item: ArchiveEntryRecord) -> some View {
@@ -173,11 +171,8 @@ struct ArchiveFileListTable: View {
             name: item.name,
             isFolder: item.isFolder,
             sizeText: sizeCell(item),
-            compressedText: compressedCell(item),
+            typeText: item.curatorTypeLabel,
             modifiedText: modifiedText,
-            colSize: colSize,
-            colCompressed: colCompressed,
-            colModified: colModified,
             isSelected: isSelected,
             isHovered: isHovered
         )
@@ -237,11 +232,6 @@ struct ArchiveFileListTable: View {
         return ByteCountFormatter.string(fromByteCount: item.byteSize, countStyle: .file)
     }
 
-    private func compressedCell(_ item: ArchiveEntryRecord) -> String {
-        if item.isFolder { return "—" }
-        return String(localized: "col.compressed.placeholder")
-    }
-
     @ViewBuilder
     private var contextItems: some View {
         Button(String(localized: "menu.extract_to_folder")) {
@@ -266,6 +256,9 @@ struct ArchiveFileListTable: View {
             Button(String(localized: "menu.add_files")) {
                 viewModel.addFromFinder()
             }
+        }
+        if viewModel.formatCaps?.supportsZipPassphrase == true {
+            Divider()
             Button(String(localized: "menu.protect_zip")) {
                 viewModel.presentProtectZipSheet()
             }

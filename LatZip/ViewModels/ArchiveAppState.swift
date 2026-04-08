@@ -10,6 +10,16 @@ import UniformTypeIdentifiers
 
 @MainActor
 final class ArchiveAppState: ObservableObject {
+    /// Formatos que se pueden crear vacíos con libarchive (`archive_write_set_format_filter_by_ext`).
+    private static let newArchiveSaveTypes: [UTType] = [
+        .zip,
+        UTType(importedAs: "public.tar-archive"),
+        UTType(importedAs: "org.gnu.gnu-gzip-archive"),
+        UTType(importedAs: "org.bzip2.bzip2-archive"),
+        UTType(importedAs: "public.xz-archive"),
+        UTType(importedAs: "org.7-zip.7-zip-archive"),
+    ]
+
     private static let extractionCollisionKey = "latzip.extractionCollisionPolicy"
     private static let appLanguageKey = "latzip.appLanguage"
 
@@ -21,6 +31,15 @@ final class ArchiveAppState: ObservableObject {
 
     /// Idioma de la UI; al cambiar se relanza la app. Llamar `applyLaunchLanguageFromUserDefaults()` al arranque.
     @Published var appLanguage: AppLanguage
+
+    /// Apariencia clara / oscura / según sistema (persistida). Sin relanzamiento.
+    @Published var appearanceMode: AppAppearance
+
+    /// Presenta la hoja de atajos de teclado (menú Ayuda).
+    @Published var showKeyboardShortcuts: Bool = false
+
+    /// Guardar contraseñas de archivos cifrados en el Llavero (opt-in).
+    @Published var archivePasswordKeychainEnabled: Bool
 
     @AppStorage("latzip.recents.json") private var recentsStorage: String = "[]"
     @AppStorage("latzip.favorites.json") private var favoritesStorage: String = "[]"
@@ -47,6 +66,36 @@ final class ArchiveAppState: ObservableObject {
         let raw = UserDefaults.standard.string(forKey: Self.extractionCollisionKey)
         extractionCollisionPolicy = ExtractionCollisionPolicy(rawValue: raw ?? "") ?? .keepBoth
         appLanguage = AppLanguage(persistedValue: UserDefaults.standard.string(forKey: Self.appLanguageKey))
+        appearanceMode = AppAppearance(persisted: UserDefaults.standard.string(forKey: AppAppearance.storageKey))
+        archivePasswordKeychainEnabled = UserDefaults.standard.bool(forKey: ArchiveKeychainPreference.userDefaultsKey)
+        AppAppearance.applyToSharedApplication(appearanceMode)
+    }
+
+    var archivePasswordKeychainBinding: Binding<Bool> {
+        Binding(
+            get: { self.archivePasswordKeychainEnabled },
+            set: { [self] newValue in
+                guard newValue != archivePasswordKeychainEnabled else { return }
+                archivePasswordKeychainEnabled = newValue
+                UserDefaults.standard.set(newValue, forKey: ArchiveKeychainPreference.userDefaultsKey)
+            }
+        )
+    }
+
+    var preferredColorScheme: ColorScheme? {
+        appearanceMode.preferredColorScheme
+    }
+
+    var appearanceModeBinding: Binding<AppAppearance> {
+        Binding(
+            get: { self.appearanceMode },
+            set: { [self] newValue in
+                guard newValue != appearanceMode else { return }
+                appearanceMode = newValue
+                UserDefaults.standard.set(newValue.persistedString, forKey: AppAppearance.storageKey)
+                AppAppearance.applyToSharedApplication(newValue)
+            }
+        )
     }
 
     /// Aplicar antes de cargar recursos localizados (p. ej. en `LatZipApp.init()`).
@@ -166,17 +215,17 @@ final class ArchiveAppState: ObservableObject {
         openArchive(url: url)
     }
 
-    /// Crea un `.zip` vacío y lo abre en una pestaña nueva.
+    /// Crea un archivo comprimido vacío (ZIP, tar, 7z, …) y lo abre en una pestaña nueva.
     func createNewEmptyZipArchive() {
         let panel = NSSavePanel()
-        panel.allowedContentTypes = [.zip]
+        panel.allowedContentTypes = Self.newArchiveSaveTypes
         panel.canCreateDirectories = true
         panel.isExtensionHidden = false
         panel.title = String(localized: "panel.new_zip")
         panel.nameFieldStringValue = "\(String(localized: "new_zip.default_name")).zip"
         guard panel.runModal() == .OK, var url = panel.url else { return }
-        if url.pathExtension.lowercased() != "zip" {
-            url = url.appendingPathExtension("zip")
+        if archive_engine_is_editable_archive_path(url.path) == 0 {
+            url = url.deletingPathExtension().appendingPathExtension("zip")
         }
         Task {
             do {
@@ -200,6 +249,19 @@ final class ArchiveAppState: ObservableObject {
         if selectedWorkspaceId == ws.id {
             selectedWorkspaceId = workspaces.last?.id
         }
+        ensureValidWorkspaceSelection()
+    }
+
+    /// Evita un `selectedWorkspaceId` huérfano si la lista de pestañas cambia.
+    func ensureValidWorkspaceSelection() {
+        if workspaces.isEmpty {
+            selectedWorkspaceId = nil
+            return
+        }
+        if let id = selectedWorkspaceId, workspaces.contains(where: { $0.id == id }) {
+            return
+        }
+        selectedWorkspaceId = workspaces.last?.id
     }
 
     func openRecent(_ url: URL) {

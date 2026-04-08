@@ -39,6 +39,8 @@ fastlane/Preview.html
 fastlane/screenshots/**/*.png
 fastlane/test_output
 
+lat/
+
 # Otros
 *.log
 *.tmp

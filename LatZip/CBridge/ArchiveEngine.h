@@ -9,6 +9,9 @@
 #define ArchiveEngine_h
 
 #include <stddef.h>
+
+/** `archive_engine_zip_apply_passphrase`: libarchive rechazó `zip:encryption=aes256` (no hay cifrado Zip tradicional). */
+#define LATZIP_ERR_ZIP_AES256_UNAVAILABLE (-60)
 #include <stdint.h>
 
 #ifdef __cplusplus
@@ -67,14 +70,14 @@ typedef struct {
     const char *archive_internal_path;
 } ArchiveZipAddPair;
 
-/// Crea un ZIP vacío en `zip_path` (sobrescribe si ya existe). Solo extensión `.zip`.
+/// Crea un archivo comprimido vacío según la extensión de `zip_path` (p. ej. `.zip`, `.tar`, `.7z`, `.tar.gz`).
 int archive_engine_zip_create_empty(
     const char *zip_path,
     char *error_message,
     size_t error_message_capacity
 );
 
-/// Añade ficheros al ZIP usando rutas internas explícitas (creación temporal + rename).
+/// Añade ficheros al archivo reempaquetando según la extensión de la ruta (ZIP, tar.*, 7z, etc.).
 int archive_engine_zip_add_paths(
     const char *zip_path,
     const ArchiveZipAddPair *pairs,
@@ -92,6 +95,10 @@ int archive_engine_zip_apply_passphrase(
     size_t error_message_capacity
 );
 
+/// Ruta cuyo sufijo es un formato que LatZip permite crear o modificar (libarchive `format_filter_by_ext`).
+int archive_engine_is_editable_archive_path(const char *archive_path);
+
+/// Solo `.zip` (contraseña / cifrado ZIP).
 int archive_engine_is_zip_extension(const char *archive_path);
 
 #ifdef __cplusplus

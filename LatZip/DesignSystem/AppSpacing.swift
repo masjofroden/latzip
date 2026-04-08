@@ -24,9 +24,19 @@ enum AppLayoutMetrics {
     static let fileListColumnGutter: CGFloat = 12
     /// Ancho reservado para el icono en fila y cabecera (debe coincidir con `FileTypeIcon`).
     static let fileListIconColumnWidth: CGFloat = 20
+    /// Grilla compartida header + filas (única fuente de verdad).
+    static let fileListColSize: CGFloat = 90
+    static let fileListColType: CGFloat = 150
+    static let fileListColModified: CGFloat = 180
+    /// Altura fija cabecera de columnas (evita estiramiento por `maxHeight: .infinity` en celdas).
+    static let fileListHeaderHeight: CGFloat = 40
+    /// Altura fija cada fila de archivo.
+    static let fileListRowHeight: CGFloat = 40
     static let fileListSectionTop: CGFloat = 0
     static let sidebarItemMinHeight: CGFloat = 34
     static let sidebarIconColumn: CGFloat = 20
+    /// Inset horizontal compartido: cabeceras de sección (p. ej. Recientes, Archivo) y fila «Ajustes» del pie.
+    static let sidebarSectionHeaderHorizontalInset: CGFloat = AppSpacing.md
     static let toolbarSearchWidth: CGFloat = 176
     static let toolbarSearchMinWidth: CGFloat = 96
     static let toolbarSearchIdealWidth: CGFloat = 152

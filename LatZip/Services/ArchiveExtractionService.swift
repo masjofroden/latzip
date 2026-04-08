@@ -62,7 +62,8 @@ struct ArchiveExtractionService: Sendable {
         passphrase: String?,
         destinationDirectory: URL,
         options: ExtractionOptions,
-        progress: Progress
+        progress: Progress,
+        onFileStart: (@Sendable (_ index1Based: Int, _ displayName: String) -> Void)? = nil
     ) async throws -> Int {
         let total = files.count
         progress.totalUnitCount = Int64(max(1, total))
@@ -74,6 +75,7 @@ struct ArchiveExtractionService: Sendable {
         for (i, file) in files.enumerated() {
             try Task.checkCancellation()
             progress.completedUnitCount = Int64(i)
+            onFileStart?(i + 1, file.name)
 
             let rel = file.fullPath
             let destFile = destinationDirectory.appendingPathComponent(rel)

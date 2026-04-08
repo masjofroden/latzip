@@ -3,7 +3,7 @@
 "menu.file" = "File";
 "menu.archive" = "Archive";
 "menu.open_archive" = "Open Archive…";
-"menu.new_empty_zip" = "New Empty ZIP…";
+"menu.new_empty_zip" = "New Compressed Archive…";
 "menu.extract" = "Extract…";
 "menu.extract_to_folder" = "Extract to Folder…";
 "menu.extract_here" = "Extract Here";
@@ -14,13 +14,19 @@
 "menu.open_nested" = "Open Compressed File in New Tab";
 
 "toolbar.extract" = "Extract";
+"toolbar.extract_primary" = "Extract";
+"toolbar.extract_primary.help" = "Extract the selection to a folder, or the entire archive if nothing is selected.";
+"toolbar.view_list" = "List view";
+"toolbar.view_grid" = "Grid view";
 "toolbar.extract_all" = "Extract All";
 "toolbar.add" = "Add";
 "toolbar.add.help" = "Add files or folders into the current folder inside this ZIP";
 "toolbar.protect_zip" = "Password";
-"toolbar.protect_zip.help" = "Protect this ZIP with a password (re-encrypts all entries)";
-"toolbar.add_help_zip_only" = "Adding is only available for .zip archives.";
+"toolbar.protect_zip.help" = "Re-write the ZIP with a password using AES-256 encryption (WinZip-style), not legacy ZipCrypto.";
+"toolbar.add_help_zip_only" = "Adding is only available for editable formats (ZIP, TAR, 7z, etc.).";
 "toolbar.close_tab" = "Close Tab";
+"tabs.strip.accessibility" = "Open documents";
+"tabs.close.accessibility" = "Close tab";
 "toolbar.close_tab_help" = "Close the current tab";
 "toolbar.up" = "Enclosing folder";
 "toolbar.ql" = "Quick Look";
@@ -46,7 +52,7 @@
 "welcome.title" = "LatZip";
 "welcome.subtitle" = "Browse ZIP, TAR, 7z and more without fully extracting.";
 "welcome.open_button" = "Open Archive…";
-"welcome.new_zip_button" = "New Empty ZIP…";
+"welcome.new_zip_button" = "New Compressed Archive…";
 "welcome.drop_title" = "Drop an archive";
 "welcome.drop_subtitle" = "Or use File › Open Archive to browse.";
 "welcome.drop_active" = "Release to open";
@@ -60,6 +66,7 @@
 
 "col.name" = "Name";
 "col.size" = "Size";
+"col.type" = "Type";
 "col.compressed" = "Compressed";
 "col.compressed.placeholder" = "—";
 "col.compressed.hint" = "Compressed size will appear when supported by the reader.";
@@ -83,6 +90,12 @@
 "inspector.empty" = "Select an item";
 "inspector.format" = "Format";
 "inspector.editing" = "Editing";
+"inspector.created" = "Created";
+"inspector.dimensions" = "Dimensions";
+"inspector.value_unavailable" = "—";
+"inspector.share_archive" = "Share Archive";
+
+"curator.encrypted_badge" = "Encrypted";
 
 "kind.folder" = "Folder";
 "kind.file" = "File";
@@ -93,7 +106,7 @@
 "status.entries_n" = "Entries: %lld";
 "status.bytes" = "Uncompressed: %@";
 "status.format_line" = "Format: %@ · Filter: %@";
-"status.edit_zip" = "ZIP — editing enabled";
+"status.edit_zip" = "Editing enabled";
 "status.edit_readonly" = "Read-only";
 "status.folder_items" = "%lld items here";
 "status.folder_bytes" = "%@ in this folder";
@@ -102,7 +115,7 @@
 "panel.extract_to_folder" = "Choose Destination Folder";
 "panel.extract_all_folder" = "Extract All To…";
 "panel.add_items" = "Add to ZIP";
-"panel.new_zip" = "Create ZIP Archive";
+"panel.new_zip" = "Create Compressed Archive";
 
 "new_zip.default_name" = "Archive";
 
@@ -112,12 +125,59 @@
 "password.body" = "Enter the password to read this archive. It is kept in memory for this session only if you choose \"Remember\".";
 "password.field" = "Password";
 "password.remember_session" = "Remember for this session";
+"password.save_keychain" = "Save password in Keychain for this file";
+"password.save_keychain.help" = "Stored only on this Mac, tied to the file path. Disable in Settings → Security.";
+"password.keychain_hint" = "You can skip typing next time if you save here. Wrong stored passwords can be removed in Keychain Access.";
+
+"prefs.security_section" = "Security";
+"prefs.keychain_archive_passwords" = "Allow saving archive passwords in Keychain";
+"prefs.keychain_footer" = "When enabled, the unlock sheet can store the password for that file path. Turning this off does not delete entries already saved (remove them in the Keychain Access app if needed). Protect ZIP with password also updates the stored password when this is on.";
 
 "action.cancel" = "Cancel";
 "action.unlock" = "Unlock";
 
 "extraction.progress" = "Extracting…";
 "extraction.progress_hint" = "You can cancel safely; already written files stay on disk.";
+"extraction.file_progress" = "%1$d / %2$d · %3$@";
+"extraction.eta_remaining" = "About %@ left";
+"extraction.eta.seconds" = "%d s";
+"extraction.eta.minutes" = "%d min";
+
+"search.regex_short" = "Regex";
+"search.regex_help" = "Treat the search field as a regular expression (matches on name, or full path when searching the entire archive).";
+"search.regex_invalid_help" = "Invalid regular expression.";
+"search.filters_help" = "Size filters (MB, applies to files; folders stay visible).";
+"search.filters_title" = "Search filters";
+"search.filters_size_hint" = "Optional. Decimal separator: period or comma.";
+"search.min_mb" = "Min (MB)";
+"search.max_mb" = "Max (MB)";
+
+"caps.more_info" = "Learn more";
+"caps.readonly" = "This archive is read-only in LatZip: you can browse and extract, but not add files or change the format.";
+"caps.editable_non_zip" = "You can add files. Password protection (AES-256) is only available for .zip.";
+"caps.zip_full" = "You can add files and apply ZIP password protection (AES-256).";
+
+"help.formats_title" = "Formats & limits";
+"help.formats_body" = "LatZip uses the system libarchive for listing and extraction. It works well with ZIP, TAR, 7z, RAR (depending on build), ISO 9660, CPIO, AR, CAB, LHA/LZH, XAR, DEB, WARC, and common compressions (gzip, bzip2, xz, zstd, lzma, Unix .Z).\n\nDisk images and raw volumes (DMG, VMDK, QCOW2, NTFS/APFS as whole disks, etc.) are not opened as “archives” by libarchive. If something does not open, the format likely needs another tool.\n\n“Protect with password” rewrites only .zip files with WinZip-style AES-256 when your libarchive supports it.";
+"help.shortcuts_menu" = "Keyboard Shortcuts…";
+"help.shortcuts_title" = "Keyboard shortcuts";
+"help.sk.new_archive" = "New compressed archive";
+"help.sk.open" = "Open archive";
+"help.sk.extract_folder" = "Extract selection — choose folder";
+"help.sk.extract_here" = "Extract selection — here";
+"help.sk.extract_all_folder" = "Extract entire archive — choose folder";
+"help.sk.extract_all_here" = "Extract entire archive — here";
+"help.sk.add_files" = "Add files";
+"help.sk.protect_zip" = "Protect ZIP with password";
+"help.sk.preview" = "Quick Look preview for selection";
+"help.sk.space" = "Space";
+"help.sk.prefs" = "Settings";
+
+"action.close" = "Close";
+
+"a11y.role_folder" = "folder";
+"a11y.role_file" = "file";
+"a11y.modified_suffix" = ", modified %@";
 
 "empty.not_loaded_title" = "Not ready";
 "empty.not_loaded_subtitle" = "Wait for the archive to finish loading.";
@@ -140,9 +200,10 @@
 "error.extract_generic" = "Extraction failed.";
 "error.extraction_cancelled" = "Extraction cancelled.";
 "error.append_unknown" = "Could not update the ZIP file.";
-"error.not_zip_edit" = "Editing is limited to ZIP archives in this version.";
+"error.not_zip_edit" = "That path is not a format LatZip can create or modify (use .zip, .tar, .7z, .tar.gz, etc.).";
 "error.add_requires_zip" = "Add is only supported for .zip files.";
 "error.zip_write_generic" = "Could not write the ZIP file.";
+"error.zip_aes256_unavailable" = "This system could not enable ZIP AES-256 encryption (check libarchive build or OS support).";
 
 "toast.preview_failed" = "Could not prepare preview.";
 "toast.extracted_n" = "%lld items extracted.";
@@ -152,7 +213,7 @@
 "toast.zip_protected" = "ZIP is now password protected.";
 
 "protect_zip.title" = "Protect ZIP";
-"protect_zip.body" = "All entries will be re-written with encryption. Use the same password you already use to open this archive if it was encrypted.";
+"protect_zip.body" = "All entries are re-written with AES-256 encryption. Use the same password you already use to open this archive if it was encrypted.";
 "protect_zip.password" = "Password";
 "protect_zip.confirm" = "Verify password";
 "protect_zip.apply" = "Apply";
@@ -165,7 +226,11 @@
 "menu.add_favorite" = "Add to Favorites";
 "menu.remove_favorite" = "Remove from Favorites";
 
-"prefs.tab_general" = "General";
+"prefs.tab_extraction" = "Extraction";
+"prefs.tab_language" = "Language";
+"prefs.tab_appearance" = "Appearance";
+"prefs.tab_security" = "Security";
+"prefs.tab_help" = "Help";
 "prefs.extraction_section" = "Extraction";
 "prefs.extraction_collision" = "When a file already exists";
 "prefs.collision.keep_both" = "Keep both (rename)";
@@ -183,3 +248,17 @@
 "prefs.language.en" = "English";
 "prefs.language.es" = "Spanish";
 "prefs.language.relaunch_footer" = "The app will quit and open again to apply the language.";
+
+"prefs.appearance.section" = "Appearance";
+"prefs.appearance.label" = "Interface style";
+"prefs.appearance.system" = "Match system setting";
+"prefs.appearance.light" = "Light";
+"prefs.appearance.dark" = "Dark";
+"prefs.appearance.footer" = "When “Match system” is selected, LatZip follows the light or dark appearance from macOS System Settings.";
+
+"prefs.help_section" = "Help";
+"prefs.show_shortcuts" = "Keyboard Shortcuts…";
+"prefs.help_shortcuts_footer" = "Same list as the Help menu. Useful when the main window is closed.";
+"prefs.finder_service_footer" = "Finder: select a file → Services → Open with LatZip (enable Services in System Settings → Keyboard → Keyboard Shortcuts → Services if needed).";
+
+"service.no_files_error" = "No files were found on the clipboard.";

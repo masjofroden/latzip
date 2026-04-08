@@ -10,6 +10,8 @@ struct ArchiveFormatCapabilities: Sendable {
     var filterName: String
     var supportsSelectiveExtraction: Bool = true
     var supportsEditing: Bool
+    /// Cifrado con contraseña vía reempaquetado ZIP (solo archivos `.zip`).
+    var supportsZipPassphrase: Bool = false
     var supportsQuickLookPreview: Bool = true
 }
 

@@ -7,11 +7,14 @@ import Foundation
 
 enum FormatSupportService {
     static func capabilities(for url: URL, formatName: String, filterName: String) -> ArchiveFormatCapabilities {
-        let zip = url.pathExtension.lowercased() == "zip"
+        let path = url.path
+        let editable = archive_engine_is_editable_archive_path(path) != 0
+        let zipPass = archive_engine_is_zip_extension(path) != 0
         return ArchiveFormatCapabilities(
             formatName: formatName,
             filterName: filterName,
-            supportsEditing: zip
+            supportsEditing: editable,
+            supportsZipPassphrase: zipPass
         )
     }
 }

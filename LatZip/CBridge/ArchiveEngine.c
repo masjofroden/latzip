@@ -455,7 +455,14 @@ int archive_engine_zip_add_paths(
     }
 
     struct archive *out = archive_write_new();
-    archive_write_set_format_zip(out);
+    if (archive_write_set_format_filter_by_ext(out, zip_path) != ARCHIVE_OK) {
+        copy_engine_error(out, error_message, error_message_capacity);
+        archive_read_close(in);
+        archive_read_free(in);
+        archive_write_free(out);
+        unlink(tmpl);
+        return ARCHIVE_FAILED;
+    }
     if (archive_write_open_filename(out, tmpl) != ARCHIVE_OK) {
         copy_engine_error(out, error_message, error_message_capacity);
         archive_read_close(in);
@@ -567,12 +574,19 @@ int archive_engine_zip_apply_passphrase(
         unlink(tmpl);
         return ARCHIVE_FAILED;
     }
-    /* Cifrado ZIP (AES-256 si está disponible; si no, tradicional). */
-    if (archive_write_set_options(out, "zip:encryption=aes256") != ARCHIVE_OK) {
+    /* Cifrado WinZip-compatible AES-256 únicamente (sin degradar a ZipCrypto). */
+    int aes_rc = archive_write_set_options(out, "zip:encryption=aes256");
+    if (aes_rc != ARCHIVE_OK) {
         archive_clear_error(out);
-        if (archive_write_set_options(out, "zip:encryption=traditional") != ARCHIVE_OK) {
-            archive_clear_error(out);
-        }
+        aes_rc = archive_write_set_options(out, "encryption=aes256");
+    }
+    if (aes_rc != ARCHIVE_OK) {
+        copy_engine_error(out, error_message, error_message_capacity);
+        archive_read_close(in);
+        archive_read_free(in);
+        archive_write_free(out);
+        unlink(tmpl);
+        return LATZIP_ERR_ZIP_AES256_UNAVAILABLE;
     }
 
     if (archive_write_open_filename(out, tmpl) != ARCHIVE_OK) {
@@ -638,7 +652,11 @@ int archive_engine_zip_create_empty(
     if (error_message && error_message_capacity) error_message[0] = '\0';
 
     struct archive *out = archive_write_new();
-    archive_write_set_format_zip(out);
+    if (archive_write_set_format_filter_by_ext(out, zip_path) != ARCHIVE_OK) {
+        copy_engine_error(out, error_message, error_message_capacity);
+        archive_write_free(out);
+        return ARCHIVE_FAILED;
+    }
     if (archive_write_open_filename(out, zip_path) != ARCHIVE_OK) {
         copy_engine_error(out, error_message, error_message_capacity);
         archive_write_free(out);
@@ -646,6 +664,35 @@ int archive_engine_zip_create_empty(
     }
     archive_write_close(out);
     archive_write_free(out);
+    return 0;
+}
+
+static int path_suffix_match_ci(const char *path, const char *suffix) {
+    size_t plen = strlen(path);
+    size_t slen = strlen(suffix);
+    if (plen < slen) return 0;
+    const char *p = path + plen - slen;
+    for (size_t i = 0; i < slen; i++) {
+        unsigned char a = (unsigned char)p[i];
+        unsigned char b = (unsigned char)suffix[i];
+        if (a >= 'A' && a <= 'Z') a = (unsigned char)(a - 'A' + 'a');
+        if (b >= 'A' && b <= 'Z') b = (unsigned char)(b - 'A' + 'a');
+        if (a != b) return 0;
+    }
+    return 1;
+}
+
+int archive_engine_is_editable_archive_path(const char *archive_path) {
+    if (!archive_path) return 0;
+    static const char *const sfx[] = {
+        ".tar.gz", ".tar.bz2", ".tar.xz",
+        ".tgz", ".tbz2", ".txz",
+        ".zip", ".tar", ".7z",
+        ".gz", ".bz2", ".xz",
+    };
+    for (size_t i = 0; i < sizeof(sfx) / sizeof(sfx[0]); i++) {
+        if (path_suffix_match_ci(archive_path, sfx[i])) return 1;
+    }
     return 0;
 }
 

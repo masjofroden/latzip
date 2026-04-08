@@ -15,13 +15,21 @@ struct SidebarSectionView<Content: View>: View {
         Section {
             content()
         } header: {
-            Label(title, systemImage: systemImage)
-                .font(AppTypography.sectionHeader)
-                .foregroundStyle(AppColors.textSecondary)
-                .textCase(.uppercase)
-                .tracking(AppLayoutMetrics.sectionTracking)
-                .padding(.top, AppSpacing.sm)
-                .padding(.bottom, AppSpacing.xs)
+            HStack(alignment: .center, spacing: AppSpacing.sm) {
+                Image(systemName: systemImage)
+                    .font(.system(size: 11, weight: .semibold))
+                    .foregroundStyle(AppColors.textSecondary)
+                    .frame(width: AppLayoutMetrics.sidebarIconColumn, alignment: .center)
+                Text(title)
+                    .font(AppTypography.sectionHeader)
+                    .foregroundStyle(AppColors.textSecondary)
+                    .textCase(.uppercase)
+                    .tracking(AppLayoutMetrics.sectionTracking)
+                Spacer(minLength: 0)
+            }
+            .padding(.top, AppSpacing.sm)
+            .padding(.bottom, AppSpacing.xs)
+            .padding(.horizontal, AppLayoutMetrics.sidebarSectionHeaderHorizontalInset)
         }
     }
 }

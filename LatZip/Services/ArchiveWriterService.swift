@@ -7,12 +7,12 @@ import Darwin
 import Foundation
 
 enum ArchiveWriteError: Error, LocalizedError {
-    case notAZip
+    case unsupportedEditFormat
     case operationFailed(String)
 
     var errorDescription: String? {
         switch self {
-        case .notAZip:
+        case .unsupportedEditFormat:
             return String(localized: "error.not_zip_edit")
         case .operationFailed(let m):
             return m
@@ -23,8 +23,8 @@ enum ArchiveWriteError: Error, LocalizedError {
 actor ArchiveWriterService {
     /// Crea un `.zip` vacío en disco (sobrescribe si existe).
     func createEmptyZip(at zipURL: URL) async throws {
-        guard archive_engine_is_zip_extension(zipURL.path) != 0 else {
-            throw ArchiveWriteError.notAZip
+        guard archive_engine_is_editable_archive_path(zipURL.path) != 0 else {
+            throw ArchiveWriteError.unsupportedEditFormat
         }
         try await Task.detached(priority: .userInitiated) {
             var err = [CChar](repeating: 0, count: 1024)
@@ -40,8 +40,8 @@ actor ArchiveWriterService {
     }
 
     func addItems(zipURL: URL, pairs: [(fileURL: URL, internalPath: String)]) async throws {
-        guard archive_engine_is_zip_extension(zipURL.path) != 0 else {
-            throw ArchiveWriteError.notAZip
+        guard archive_engine_is_editable_archive_path(zipURL.path) != 0 else {
+            throw ArchiveWriteError.unsupportedEditFormat
         }
         try await Task.detached(priority: .userInitiated) {
             var err = [CChar](repeating: 0, count: 1024)
@@ -79,7 +79,7 @@ actor ArchiveWriterService {
     /// Reescribe el ZIP cifrando todas las entradas con la nueva contraseña.
     func applyPassphrase(zipURL: URL, readPassphrase: String?, newPassphrase: String) async throws {
         guard archive_engine_is_zip_extension(zipURL.path) != 0 else {
-            throw ArchiveWriteError.notAZip
+            throw ArchiveWriteError.unsupportedEditFormat
         }
         try await Task.detached(priority: .userInitiated) {
             var err = [CChar](repeating: 0, count: 1024)
@@ -94,6 +94,9 @@ actor ArchiveWriterService {
                 }
             }
             guard rc == 0 else {
+                if rc == LATZIP_ERR_ZIP_AES256_UNAVAILABLE {
+                    throw ArchiveWriteError.operationFailed(String(localized: "error.zip_aes256_unavailable"))
+                }
                 let msg = err.withUnsafeBufferPointer { String(cString: $0.baseAddress!) }
                     .trimmingCharacters(in: .controlCharacters)
                 throw ArchiveWriteError.operationFailed(msg.isEmpty ? String(localized: "error.zip_write_generic") : msg)

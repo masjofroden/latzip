@@ -2,6 +2,25 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>NSServices</key>
+	<array>
+		<dict>
+			<key>NSMenuItem</key>
+			<dict>
+				<key>default</key>
+				<string>Open with LatZip</string>
+			</dict>
+			<key>NSMessage</key>
+			<string>openArchivesInLatZip</string>
+			<key>NSPortName</key>
+			<string>LatZip</string>
+			<key>NSSendTypes</key>
+			<array>
+				<string>public.file-url</string>
+				<string>NSFilenamesPboardType</string>
+			</array>
+		</dict>
+	</array>
 	<key>CFBundleDocumentTypes</key>
 	<array>
 		<dict>
@@ -21,6 +40,11 @@
 				<string>org.gnu.gnu-gzip-archive</string>
 				<string>org.bzip2.bzip2-archive</string>
 				<string>public.xz-archive</string>
+				<string>public.iso-image</string>
+				<string>com.apple.xar-archive</string>
+				<string>public.unix-archive</string>
+				<string>org.debian.deb-archive</string>
+				<string>com.microsoft.cab</string>
 			</array>
 			<key>CFBundleTypeExtensions</key>
 			<array>
@@ -40,6 +64,18 @@
 				<string>zst</string>
 				<string>lzma</string>
 				<string>cpio</string>
+				<string>iso</string>
+				<string>ar</string>
+				<string>deb</string>
+				<string>udeb</string>
+				<string>rpm</string>
+				<string>cab</string>
+				<string>xar</string>
+				<string>pkg</string>
+				<string>lha</string>
+				<string>lzh</string>
+				<string>warc</string>
+				<string>Z</string>
 			</array>
 		</dict>
 	</array>

@@ -12,16 +12,21 @@ struct ArchiveWorkspaceView: View {
 
     @State private var columnVisibility: NavigationSplitViewVisibility = .all
     @State private var isDropTargeted = false
+    @State private var showFormatsHelp = false
 
     var body: some View {
         NavigationSplitView(columnVisibility: $columnVisibility) {
             ArchiveSidebarPanel(viewModel: viewModel)
         } content: {
             contentColumn
+                .frame(minWidth: 360, maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+                .layoutPriority(1)
         } detail: {
             ArchivePreviewInspectorPanel(viewModel: viewModel)
+                .layoutPriority(0)
         }
-        .navigationSplitViewStyle(.balanced)
+        .navigationSplitViewStyle(.automatic)
+        .toolbarBackground(.visible, for: .windowToolbar)
         .onAppear {
             syncColumnVisibility()
         }
@@ -30,7 +35,7 @@ struct ArchiveWorkspaceView: View {
                 syncColumnVisibility()
             }
         }
-        // Migas en `breadcrumbBar` (columna central). Toolbar solo iconos para que no desaparezca al cambiar de archivo.
+        // Migas en `breadcrumbBar` (columna central). Pestañas en `WorkspaceTabStripView` (shell), no `TabView`, para no colapsar la toolbar.
         .toolbar(content: workspaceToolbarContent)
         .sheet(isPresented: $viewModel.showPasswordSheet) {
             passwordSheet
@@ -43,6 +48,9 @@ struct ArchiveWorkspaceView: View {
         }, message: {
             Text(viewModel.loadError ?? "")
         })
+        .sheet(isPresented: $showFormatsHelp) {
+            FormatsHelpSheetView()
+        }
         .overlay { progressOverlay }
         .safeAreaInset(edge: .bottom) { toastBar }
         .onChange(of: viewModel.selection) { _ in
@@ -67,141 +75,167 @@ struct ArchiveWorkspaceView: View {
     @ToolbarContentBuilder
     private func workspaceToolbarContent() -> some ToolbarContent {
         ToolbarItemGroup(placement: .navigation) {
-            Group {
-                AppToolbarButton(
-                    title: String(localized: "toolbar.up"),
-                    systemImage: "arrow.up.square",
-                    helpText: String(localized: "toolbar.up.help"),
-                    disabled: viewModel.browseFolderPath.isEmpty
-                ) {
-                    withAnimation(AppAnimation.standard) {
-                        viewModel.goUp()
-                    }
+            AppToolbarButton(
+                title: String(localized: "toolbar.up"),
+                systemImage: "arrow.up.square",
+                helpText: String(localized: "toolbar.up.help"),
+                disabled: viewModel.browseFolderPath.isEmpty
+            ) {
+                withAnimation(AppAnimation.standard) {
+                    viewModel.goUp()
                 }
             }
             .labelStyle(.iconOnly)
         }
 
         ToolbarItemGroup(placement: .primaryAction) {
-            Group {
-                AppToolbarButton(
-                    title: String(localized: "toolbar.open"),
-                    systemImage: "folder.badge.plus",
-                    helpText: String(localized: "toolbar.open.help")
-                ) {
-                    app.openPanel()
-                }
+            Button {
+                viewModel.fileListUsesGridLayout.toggle()
+            } label: {
+                Image(systemName: viewModel.fileListUsesGridLayout ? "list.bullet" : "square.grid.2x2")
+            }
+            .help(
+                viewModel.fileListUsesGridLayout
+                    ? String(localized: "toolbar.view_list")
+                    : String(localized: "toolbar.view_grid")
+            )
+            .labelStyle(.iconOnly)
 
-                Menu {
-                    Button(String(localized: "menu.extract_to_folder")) {
-                        viewModel.extractSelected(collision: app.extractionCollisionPolicy)
-                    }
-                    .disabled(viewModel.selection.isEmpty)
-                    Button(String(localized: "menu.extract_here")) {
-                        viewModel.extractSelectedHere(collision: app.extractionCollisionPolicy)
-                    }
-                    .disabled(viewModel.selection.isEmpty)
-                } label: {
-                    Label(String(localized: "toolbar.extract"), systemImage: "arrow.down.circle")
+            Button {
+                if viewModel.selection.isEmpty {
+                    viewModel.extractEntireArchive(collision: app.extractionCollisionPolicy)
+                } else {
+                    viewModel.extractSelected(collision: app.extractionCollisionPolicy)
                 }
-                .help(String(localized: "toolbar.extract.help"))
+            } label: {
+                Text(String(localized: "toolbar.extract_primary"))
+            }
+            .buttonStyle(.borderedProminent)
+            .tint(CuratorDesignTokens.accentBlue)
+            .disabled(viewModel.index == nil)
+            .help(String(localized: "toolbar.extract_primary.help"))
 
-                AppToolbarButton(
-                    title: String(localized: "toolbar.add"),
-                    systemImage: "plus.circle",
-                    helpText: viewModel.formatCaps?.supportsEditing == true
-                        ? String(localized: "toolbar.add.help")
-                        : String(localized: "toolbar.add_help_zip_only"),
-                    disabled: viewModel.formatCaps?.supportsEditing != true
-                ) {
-                    viewModel.addFromFinder()
-                }
+            AppToolbarButton(
+                title: String(localized: "toolbar.open"),
+                systemImage: "folder.badge.plus",
+                helpText: String(localized: "toolbar.open.help")
+            ) {
+                app.openPanel()
+            }
+            .labelStyle(.iconOnly)
 
-                AppToolbarButton(
-                    title: String(localized: "toolbar.protect_zip"),
-                    systemImage: "lock.fill",
-                    helpText: String(localized: "toolbar.protect_zip.help"),
-                    disabled: viewModel.formatCaps?.supportsEditing != true || viewModel.index == nil
-                ) {
-                    viewModel.presentProtectZipSheet()
+            Menu {
+                Button(String(localized: "menu.extract_to_folder")) {
+                    viewModel.extractSelected(collision: app.extractionCollisionPolicy)
                 }
-
-                Menu {
-                    Button(String(localized: "menu.extract_all_to_folder")) {
-                        viewModel.extractEntireArchive(collision: app.extractionCollisionPolicy)
-                    }
-                    .disabled(viewModel.index == nil)
-                    Button(String(localized: "menu.extract_all_here")) {
-                        viewModel.extractEntireArchiveHere(collision: app.extractionCollisionPolicy)
-                    }
-                    .disabled(viewModel.index == nil)
-                } label: {
-                    Label(String(localized: "toolbar.extract_all"), systemImage: "arrow.down.to.line.circle")
-                }
-                .help(String(localized: "toolbar.extract_all.help"))
-
-                Button {
-                    Task {
-                        if let r = viewModel.firstSelectedRecord() { await viewModel.preparePreview(for: r) }
-                    }
-                } label: {
-                    Label(String(localized: "toolbar.ql"), systemImage: "eye")
-                }
-                .keyboardShortcut(.space, modifiers: [])
-                .help(String(localized: "toolbar.ql.help"))
                 .disabled(viewModel.selection.isEmpty)
-
-                AppToolbarButton(
-                    title: String(localized: "toolbar.favorite"),
-                    systemImage: app.isFavorite(viewModel.archiveURL) ? "star.fill" : "star",
-                    helpText: app.isFavorite(viewModel.archiveURL)
-                        ? String(localized: "toolbar.favorite.remove_help")
-                        : String(localized: "toolbar.favorite.add_help")
-                ) {
-                    app.toggleFavorite(viewModel.archiveURL)
+                Button(String(localized: "menu.extract_here")) {
+                    viewModel.extractSelectedHere(collision: app.extractionCollisionPolicy)
                 }
+                .disabled(viewModel.selection.isEmpty)
+            } label: {
+                Label(String(localized: "toolbar.extract"), systemImage: "arrow.down.circle")
+            }
+            .help(String(localized: "toolbar.extract.help"))
+            .labelStyle(.iconOnly)
 
-                AppToolbarButton(
-                    title: String(localized: "toolbar.close_tab"),
-                    systemImage: "xmark.circle.fill",
-                    helpText: String(localized: "toolbar.close_tab_help")
-                ) {
-                    app.closeWorkspace(viewModel)
+            AppToolbarButton(
+                title: String(localized: "toolbar.add"),
+                systemImage: "plus.circle",
+                helpText: viewModel.formatCaps?.supportsEditing == true
+                    ? String(localized: "toolbar.add.help")
+                    : String(localized: "toolbar.add_help_zip_only"),
+                disabled: viewModel.formatCaps?.supportsEditing != true
+            ) {
+                viewModel.addFromFinder()
+            }
+            .labelStyle(.iconOnly)
+
+            AppToolbarButton(
+                title: String(localized: "toolbar.protect_zip"),
+                systemImage: "lock.fill",
+                helpText: String(localized: "toolbar.protect_zip.help"),
+                disabled: viewModel.formatCaps?.supportsZipPassphrase != true || viewModel.index == nil
+            ) {
+                viewModel.presentProtectZipSheet()
+            }
+            .labelStyle(.iconOnly)
+
+            Menu {
+                Button(String(localized: "menu.extract_all_to_folder")) {
+                    viewModel.extractEntireArchive(collision: app.extractionCollisionPolicy)
+                }
+                .disabled(viewModel.index == nil)
+                Button(String(localized: "menu.extract_all_here")) {
+                    viewModel.extractEntireArchiveHere(collision: app.extractionCollisionPolicy)
+                }
+                .disabled(viewModel.index == nil)
+            } label: {
+                Label(String(localized: "toolbar.extract_all"), systemImage: "arrow.down.to.line.circle")
+            }
+            .help(String(localized: "toolbar.extract_all.help"))
+            .labelStyle(.iconOnly)
+
+            Button {
+                Task {
+                    if let r = viewModel.firstSelectedRecord() { await viewModel.preparePreview(for: r) }
+                }
+            } label: {
+                Label(String(localized: "toolbar.ql"), systemImage: "eye")
+            }
+            .keyboardShortcut(.space, modifiers: [])
+            .help(String(localized: "toolbar.ql.help"))
+            .disabled(viewModel.selection.isEmpty)
+            .labelStyle(.iconOnly)
+
+            AppToolbarButton(
+                title: String(localized: "toolbar.favorite"),
+                systemImage: app.isFavorite(viewModel.archiveURL) ? "star.fill" : "star",
+                helpText: app.isFavorite(viewModel.archiveURL)
+                    ? String(localized: "toolbar.favorite.remove_help")
+                    : String(localized: "toolbar.favorite.add_help")
+            ) {
+                app.toggleFavorite(viewModel.archiveURL)
+            }
+            .labelStyle(.iconOnly)
+
+            AppToolbarButton(
+                title: String(localized: "toolbar.close_tab"),
+                systemImage: "xmark.circle.fill",
+                helpText: String(localized: "toolbar.close_tab_help")
+            ) {
+                app.closeWorkspace(viewModel)
+            }
+            .labelStyle(.iconOnly)
+
+            AppToolbarButton(
+                title: String(localized: "toolbar.preview_panel"),
+                systemImage: "rectangle.split.2x1",
+                helpText: String(localized: "toolbar.preview_panel.help")
+            ) {
+                withAnimation(AppAnimation.standard) {
+                    viewModel.showPreviewPanel.toggle()
                 }
             }
             .labelStyle(.iconOnly)
         }
 
-        ToolbarItemGroup(placement: .automatic) {
-            Group {
-                sortMenu
-                    .labelStyle(.iconOnly)
-
-                SearchFieldView(
-                    text: $viewModel.searchText,
-                    searchEntireArchive: $viewModel.searchEntireArchive,
-                    placeholder: String(localized: "search.placeholder"),
-                    scopeAllLabel: String(localized: "search.scope_all_short"),
-                    scopeHelp: String(localized: "search.scope_all"),
-                    onTextChange: { viewModel.applyListFilterAndSort() },
-                    onScopeChange: { viewModel.applyListFilterAndSort() }
-                )
-            }
-        }
-
-        ToolbarItem {
-            Group {
-                AppToolbarButton(
-                    title: String(localized: "toolbar.preview_panel"),
-                    systemImage: "rectangle.split.2x1",
-                    helpText: String(localized: "toolbar.preview_panel.help")
-                ) {
-                    withAnimation(AppAnimation.standard) {
-                        viewModel.showPreviewPanel.toggle()
-                    }
-                }
-            }
-            .labelStyle(.iconOnly)
+        ToolbarItemGroup(placement: .secondaryAction) {
+            sortMenu
+                .labelStyle(.iconOnly)
+            SearchFieldView(
+                text: $viewModel.searchText,
+                searchEntireArchive: $viewModel.searchEntireArchive,
+                searchUsesRegex: $viewModel.searchUsesRegex,
+                searchMinSizeMBText: $viewModel.searchMinSizeMBText,
+                searchMaxSizeMBText: $viewModel.searchMaxSizeMBText,
+                searchRegexInvalid: viewModel.searchRegexInvalid,
+                placeholder: String(localized: "search.placeholder"),
+                scopeAllLabel: String(localized: "search.scope_all_short"),
+                scopeHelp: String(localized: "search.scope_all"),
+                onTextChange: { viewModel.applyListFilterAndSort() },
+                onScopeChange: { viewModel.applyListFilterAndSort() }
+            )
         }
     }
 
@@ -216,7 +250,14 @@ struct ArchiveWorkspaceView: View {
         VStack(spacing: 0) {
             breadcrumbBar
 
+            if let caps = viewModel.formatCaps, viewModel.index != nil {
+                ArchiveCapabilityBannerView(caps: caps) {
+                    showFormatsHelp = true
+                }
+            }
+
             ArchiveFileListTable(viewModel: viewModel)
+                .layoutPriority(1)
                 .overlay { dropHighlightOverlay }
                 .onDrop(of: [.fileURL], isTargeted: $isDropTargeted) { providers in
                     handleAddDrop(providers)
@@ -224,7 +265,7 @@ struct ArchiveWorkspaceView: View {
 
             StatusBarView(viewModel: viewModel)
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         .background(AppColors.appBackground)
     }
 
@@ -279,9 +320,8 @@ struct ArchiveWorkspaceView: View {
         Menu {
             sortButton(.name, label: String(localized: "col.name"))
             sortButton(.size, label: String(localized: "col.size"))
-            sortButton(.compressed, label: String(localized: "col.compressed"))
+            sortButton(.kind, label: String(localized: "col.type"))
             sortButton(.modified, label: String(localized: "col.modified"))
-            sortButton(.kind, label: String(localized: "inspector.kind"))
         } label: {
             Label(String(localized: "toolbar.sort"), systemImage: "arrow.up.arrow.down.circle")
         }
@@ -314,6 +354,38 @@ struct ArchiveWorkspaceView: View {
                         ProgressView(value: p.fractionCompleted)
                             .progressViewStyle(.linear)
                             .frame(width: 280)
+                            .animation(.easeInOut(duration: 0.25), value: p.fractionCompleted)
+                        TimelineView(.periodic(from: .now, by: 0.4)) { context in
+                            VStack(spacing: AppSpacing.sm) {
+                                if let d = viewModel.extractionProgressDetail, d.total > 0, !d.fileName.isEmpty {
+                                    Text(
+                                        String(
+                                            format: String(localized: "extraction.file_progress"),
+                                            locale: .current,
+                                            d.current,
+                                            d.total,
+                                            d.fileName
+                                        )
+                                    )
+                                    .font(AppTypography.caption)
+                                    .foregroundStyle(AppColors.textSecondary)
+                                    .lineLimit(2)
+                                    .multilineTextAlignment(.center)
+                                    .frame(maxWidth: 320)
+                                }
+                                if let eta = viewModel.estimatedExtractionRemaining(at: context.date) {
+                                    Text(
+                                        String(
+                                            format: String(localized: "extraction.eta_remaining"),
+                                            locale: .current,
+                                            eta
+                                        )
+                                    )
+                                    .font(AppTypography.caption)
+                                    .foregroundStyle(AppColors.textTertiary)
+                                }
+                            }
+                        }
                         Text(String(localized: "extraction.progress_hint"))
                             .font(AppTypography.caption)
                             .foregroundStyle(AppColors.textSecondary)
@@ -370,6 +442,13 @@ struct ArchiveWorkspaceView: View {
             SecureField(String(localized: "password.field"), text: $viewModel.passwordField)
                 .textFieldStyle(.roundedBorder)
             Toggle(String(localized: "password.remember_session"), isOn: $viewModel.rememberPasswordForSession)
+            if app.archivePasswordKeychainEnabled {
+                Toggle(String(localized: "password.save_keychain"), isOn: $viewModel.savePasswordToKeychain)
+                    .help(String(localized: "password.save_keychain.help"))
+                Text(String(localized: "password.keychain_hint"))
+                    .font(AppTypography.caption)
+                    .foregroundStyle(AppColors.textTertiary)
+            }
             HStack {
                 Spacer()
                 Button(String(localized: "action.cancel"), role: .cancel) {
